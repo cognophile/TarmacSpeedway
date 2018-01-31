@@ -6,13 +6,13 @@ public class Main {
 
     public static void main(String[] args)
     {
-        GraphicalWindow coreWindow = new GraphicalWindow("Welcome!");
+        CoreWindow coreWindow = new CoreWindow("Welcome to TarmacSpeedway!");
         coreWindow.setWindowSize(500, 500);
 
-        GraphicalPanel initialPanel = new GraphicalPanel();
-        initialPanel.add(new JLabel("Welcome to TarmacSpeedway!", JLabel.CENTER));
+        ImagePanel panel = new ImagePanel();
+        panel.loadImages();
 
-        coreWindow.addComponents(initialPanel);
+        coreWindow.addComponents(panel);
         coreWindow.render();
     }
 }
