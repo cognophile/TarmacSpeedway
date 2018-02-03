@@ -19,6 +19,15 @@ public abstract class DeviceOS
 
     private static String operatingSystemInfo()
     {
-        return System.getProperty("os.name");
+        String osName = "";
+        try {
+            osName = System.getProperty("os.name");
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+
+        return osName;
     }
 }
