@@ -14,4 +14,4 @@ _'Sources'_ tab on the right.
 
 - Select the `src` directory and mark as _'Sources'_, `src/test` as _'Tests'_, and `src/main/resources` as _'Resources'_. Click _'OK'_.
 
-- Configure a runner: _'Run'_ > _'Run...'_ or _'Edit configurations...'_ > set the class path to `main.java.Main`.
+- Configure a runner: _'Run'_ > _'Run...'_ or _'Edit configurations...'_ > set the class path to `main.java.ApplicationLauncher`.
