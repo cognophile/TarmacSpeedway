@@ -3,7 +3,7 @@ package main.java;
 import javax.swing.*;
 import java.awt.*;
 
-public class Main {
+public class ApplicationLauncher {
 
     public static void main(String[] args)
     {
