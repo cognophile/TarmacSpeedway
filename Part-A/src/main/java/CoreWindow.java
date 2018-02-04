@@ -41,7 +41,9 @@ public class CoreWindow extends JFrame
 
     public void addComponents(Component component)
     {
-        this.components.add(component);
+        if (component != null) {
+            this.components.add(component);
+        }
     }
 
     private void loadComponents()
