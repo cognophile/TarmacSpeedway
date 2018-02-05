@@ -11,10 +11,12 @@ public class CoreWindow extends JFrame
 {
     private JFrame window;
     private List<Component> components = new ArrayList<Component>();
+    private Container contentPane;
 
     public CoreWindow(String windowTitle)
     {
         this.window = new JFrame(windowTitle);
+        this.contentPane = this.window.getContentPane();
     }
 
     public void render()
@@ -34,11 +36,6 @@ public class CoreWindow extends JFrame
         this.window.setSize(width, height);
     }
 
-    public void setWindowLayout(int rows, int columns)
-    {
-        this.window.setLayout(new GridLayout(rows, columns));
-    }
-
     public void addComponents(Component component)
     {
         if (component != null) {
@@ -50,7 +47,7 @@ public class CoreWindow extends JFrame
     {
         for (final Component obj : this.components)
         {
-            this.window.add(obj);
+            this.contentPane.add(obj);
         }
     }
 }
