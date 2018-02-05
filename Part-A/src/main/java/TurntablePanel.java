@@ -10,7 +10,7 @@ public class TurntablePanel extends JPanel implements ActionListener
 {
     private int imageIndex = 0;
     private int animationSpeed;
-    private Map<String, ImageIcon> raceCar;
+    private Map<String, ImageIcon> redCar;
     private Timer timer = new Timer(animationSpeed, this);
     private String filePrefix = "red_small_";
 
@@ -24,7 +24,7 @@ public class TurntablePanel extends JPanel implements ActionListener
     {
         try
         {
-            this.raceCar = ImageLoader.importImages();
+            this.redCar = ImageLoader.loadRedCar();
         }
         catch (UnsupportedOperationException ex)
         {
@@ -44,9 +44,9 @@ public class TurntablePanel extends JPanel implements ActionListener
         super.paintComponent(graphic);
 
         String imageName = new String(filePrefix + imageIndex + ".png");
-        ImageIcon current = raceCar.get(imageName);
-        current.paintIcon(this, graphic, 212, 212);
+        ImageIcon current = redCar.get(imageName);
 
+        current.paintIcon(this, graphic, 212, 212);
         this.setBackground(Color.darkGray);
     }
 
@@ -55,7 +55,10 @@ public class TurntablePanel extends JPanel implements ActionListener
 
         if(e.getSource() == this.timer)
         {
-            if (imageIndex >= 16) { imageIndex = 0; }
+            if (imageIndex >= 16)
+            {
+                imageIndex = 0;
+            }
 
             try {
                 Thread.sleep(125);
