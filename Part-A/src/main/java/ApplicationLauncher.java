@@ -11,7 +11,7 @@ public class ApplicationLauncher {
         CoreWindow splash = new CoreWindow("TarmacSpeedway: Pits Turntable!");
         splash.setWindowSize(500, 600);
 
-        // Create the supplementary panels
+        // Create the main and supplementary panels, and components
         JPanel mainPanel = new JPanel();
         JButton startGameButton = new JButton("Let's Race!");
         HeaderPanel titleLabel = new HeaderPanel("Welcome!");
@@ -23,12 +23,13 @@ public class ApplicationLauncher {
         // Construct the panels into a vertical layout
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        titleLabel.setMaximumSize( new Dimension(600, 50));
-        startGameButton.setMaximumSize( new Dimension(120, 30));
-        animationPanel.setMaximumSize( new Dimension(600, 500));
-
+        titleLabel.setMaximumSize(new Dimension(600, 50));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        startGameButton.setMaximumSize(new Dimension(120, 25));
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        animationPanel.setMaximumSize(new Dimension(600, 500));
         animationPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Add panel elements to a container panel
