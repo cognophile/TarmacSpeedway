@@ -28,6 +28,11 @@ public class TurntablePanel extends JPanel implements ActionListener
         }
         catch (UnsupportedOperationException ex)
         {
+            // Inform the user an error occurred.
+            JOptionPane.showMessageDialog(null, "ERROR: This operating system is not supported!\n" + ex.getMessage(), "Error!",
+                    JOptionPane.ERROR_MESSAGE);
+
+            // Simulate logging the error
             System.out.println(ex.getMessage());
             System.exit(1);
         }
@@ -64,6 +69,11 @@ public class TurntablePanel extends JPanel implements ActionListener
                 Thread.sleep(125);
             }
             catch (InterruptedException ex) {
+                // Inform the user an error occurred.
+                JOptionPane.showMessageDialog(null, "ERROR: Process interrupted. Please restart.\n" + ex.getMessage(), "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+
+                // Simulate logging the error
                 System.out.println(ex.getMessage());
                 System.exit(1);
             }

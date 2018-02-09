@@ -1,5 +1,7 @@
 package main.java;
 
+import javax.swing.*;
+
 public abstract class DeviceOS
 {
     public static boolean isUnix()
@@ -24,7 +26,8 @@ public abstract class DeviceOS
             osName = System.getProperty("os.name");
         }
         catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "ERROR: Could not determine host platform!\n" + ex.getMessage(), "Error!",
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
 
