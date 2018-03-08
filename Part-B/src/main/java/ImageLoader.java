@@ -17,7 +17,7 @@ public abstract class ImageLoader
      * @throws if the device OS is not Unix-based or Windows, throw an UnsupportedOperationException
      * @return Map of image filesnames (Strings) to a representation of the corresponding image (ImageIcon)
      */
-    public static Map<String, ImageIcon> loadRedCar() throws UnsupportedOperationException
+    public final static Map<String, ImageIcon> loadRedCar() throws UnsupportedOperationException
     {
         File imageDirectory = null;
         Map<String, ImageIcon> carImageMap = new HashMap<>();
@@ -55,7 +55,7 @@ public abstract class ImageLoader
      * @throws if the device OS is not Unix-based or Windows, throw an UnsupportedOperationException
      * @return Map of image filesnames (Strings) to a representation of the corresponding image (ImageIcon)
      */
-    public static Map<String, ImageIcon> loadGreenCar() throws UnsupportedOperationException
+    public final static Map<String, ImageIcon> loadGreenCar() throws UnsupportedOperationException
     {
         File imageDirectory = null;
         Map<String, ImageIcon> carImageMap = new HashMap<>();
@@ -88,13 +88,13 @@ public abstract class ImageLoader
         return carImageMap;
     }
 
-    private static File getRedCarImagePath(String resourcePath)
+    private final static File getRedCarImagePath(String resourcePath)
     {
         String systemPath = new File("").getAbsolutePath();
         return new File(systemPath + resourcePath);
     }
 
-    private static File getGreenCarImagePath(String resourcePath)
+    private final static File getGreenCarImagePath(String resourcePath)
     {
         String systemPath = new File("").getAbsolutePath();
         return new File(systemPath + resourcePath);
