@@ -10,7 +10,7 @@ public class ApplicationLauncher
             @Override
             public void run()
             {
-                new SplashWindow().start();
+                new ClientSplashWindow().start();
             }
         });
     }

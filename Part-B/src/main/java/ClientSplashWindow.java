@@ -5,25 +5,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SplashWindow implements ActionListener
+public class ClientSplashWindow implements ActionListener
 {
-    private BaseWindow splash;
+    private ClientBaseWindow splash;
     private JButton startGameButton;
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        BaseWindow destination = new BaseWindow("TarmacSpeedway: Trackside");
-        destination.setWindowSize(this.splash.getWidth(), this.splash.getHeight());
+        ClientTrackWindow track = new ClientTrackWindow();
+        track.buildWindow();
 
-        destination.render();
         this.splash.close();
     }
 
     public final void start()
     {
         // Create the GUI window
-        this.splash = new BaseWindow("TarmacSpeedway: Pitlane");
+        this.splash = new ClientBaseWindow("TarmacSpeedway: Pitlane");
         this.splash.setWindowSize(500, 600);
 
         // Create the main and supplementary panels, and components
