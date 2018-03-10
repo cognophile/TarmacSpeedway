@@ -7,18 +7,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
-public class ClientBaseWindow extends JFrame
+public class BaseWindow extends JFrame
 {
     private JFrame window;
     private List<Component> components = new ArrayList<Component>();
     private Container contentPane;
 
-    public ClientBaseWindow()
+    public BaseWindow()
     {
         this.composeWindow();
     }
 
-    public ClientBaseWindow(String windowTitle)
+    public BaseWindow(String windowTitle)
     {
         this.composeWindow(windowTitle);
     }

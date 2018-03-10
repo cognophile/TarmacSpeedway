@@ -1,16 +1,15 @@
 package main.java;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class ClientTrackWindow
+public class TrackWindow
 {
-    private ClientBaseWindow trackWindow;
+    private BaseWindow trackWindow;
     private TrackPanel track;
 
-    public ClientTrackWindow()
+    public TrackWindow()
     {
-        this.trackWindow = new ClientBaseWindow("TarmacSpeedway: Track");
+        this.trackWindow = new BaseWindow("TarmacSpeedway: Track");
         this.track = new TrackPanel();
     }
 

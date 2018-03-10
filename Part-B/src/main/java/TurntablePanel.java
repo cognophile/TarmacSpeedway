@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 
 public class TurntablePanel extends JPanel implements ActionListener
 {
@@ -31,7 +30,6 @@ public class TurntablePanel extends JPanel implements ActionListener
         super.paintComponent(graphic);
 
         String imageName = this.redCar.getImageFilenameByIndex(imageIndex);
-
         ImageIcon current = this.redCar.getImage(imageName);
 
         current.paintIcon(this, graphic, 212, 212);
