@@ -2,16 +2,16 @@ package main.java;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 
 public class TrackPanel extends JPanel
 {
-    private Map<String, ImageIcon> redCar;
-    private Map<String, ImageIcon> greenCar;
+    private Car redCar;
+    private Car greenCar;
 
     public TrackPanel()
     {
-        this.loadCars();
+        this.redCar = new Car("red");
+        this.greenCar = new Car("green");
     }
 
     @Override
@@ -37,28 +37,9 @@ public class TrackPanel extends JPanel
         g.setColor(c4);
         g.drawLine(425, 500, 425, 600); // start line
 
-        ImageIcon red = redCar.get("red_small_13.png");
-        ImageIcon green = greenCar.get("green_small_13.png");
+        ImageIcon red = this.redCar.getImage(this.redCar.getImageFilenameByIndex(13));
+        ImageIcon green = this.greenCar.getImage(this.greenCar.getImageFilenameByIndex(13));
         red.paintIcon(this, g, 425, 490);
         green.paintIcon(this, g, 425, 540);
-    }
-
-    public void loadCars()
-    {
-        try
-        {
-            this.redCar = ImageLoader.loadRedCar();
-            this.greenCar = ImageLoader.loadGreenCar();
-        }
-        catch (UnsupportedOperationException ex)
-        {
-            // Inform the user an error occurred.
-            JOptionPane.showMessageDialog(null, "ERROR: This operating system is not supported!\n" + ex.getMessage(), "Error!",
-                    JOptionPane.ERROR_MESSAGE);
-
-            // Simulate logging the error
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
     }
 }
