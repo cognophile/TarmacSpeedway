@@ -14,12 +14,12 @@ public class Car
 
     public Car(String colour)
     {
-        if (colour.toLowerCase() == "red") {
+        if (colour.toLowerCase().equals("red")) {
             this.COLOUR = colour.toLowerCase();
             this.carImages = this.loadRedCarImages();
         }
 
-        if (colour.toLowerCase() == "green") {
+        if (colour.toLowerCase().equals("green")) {
             this.COLOUR = colour.toLowerCase();
             this.carImages = this.loadGreenCarImages();
         }
@@ -53,17 +53,17 @@ public class Car
 
     private String getImagePrefix()
     {
-        if (this.COLOUR.toLowerCase() == "red") {
-            return this.RED_CAR_FILE_PREFIX;
+        if (this.COLOUR.toLowerCase().equals("red")) {
+            return RED_CAR_FILE_PREFIX;
         }
         else {
-            return this.GREEN_CAR_FILE_PREFIX;
+            return GREEN_CAR_FILE_PREFIX;
         }
     }
 
     private String getImageSuffix()
     {
-        return this.IMAGE_SUFFIX;
+        return IMAGE_SUFFIX;
     }
 
     private Map<String, ImageIcon> loadRedCarImages()
