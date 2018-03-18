@@ -34,7 +34,7 @@ public class UDPServerDaemon
         this.start();
     }
 
-    public void start()
+    private void start()
     {
         System.out.println("Starting server daemon...");
 
@@ -42,7 +42,7 @@ public class UDPServerDaemon
         this.writeData();
     }
 
-    public void listen()
+    private void listen()
     {
         System.out.println("Listening...");
 
@@ -57,7 +57,7 @@ public class UDPServerDaemon
         }
     }
 
-    public void reply() { }
+    private void reply() { }
 
     private void readPacket()
     {
