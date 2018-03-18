@@ -6,17 +6,17 @@ public abstract class DeviceOS
 {
     public static boolean isUnix()
     {
-        return (operatingSystemInfo().toLowerCase().indexOf("linux") >= 0 || operatingSystemInfo().toLowerCase().indexOf("unix") >= 0);
+        return (operatingSystemInfo().toLowerCase().contains("linux") || operatingSystemInfo().toLowerCase().contains("unix"));
     }
 
     public static boolean isMac()
     {
-        return (operatingSystemInfo().toLowerCase().indexOf("mac os x") >= 0);
+        return (operatingSystemInfo().toLowerCase().contains("mac os x"));
     }
 
     public static boolean isWindows()
     {
-        return (operatingSystemInfo().toLowerCase().indexOf("windows") >= 0);
+        return (operatingSystemInfo().toLowerCase().contains("windows"));
     }
 
     private static String operatingSystemInfo()
