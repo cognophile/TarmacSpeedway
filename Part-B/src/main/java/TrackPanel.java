@@ -22,7 +22,12 @@ public class TrackPanel extends JPanel
 
         Color c1 = Color.green;
         g.setColor(c1);
-        g.fillRect(150, 200, 550, 300); //grass
+        g.fillRect(150, 200, 550, 300); // centre grass
+        g.fillRect(0, 0, 900, 100); // top grass
+        g.fillRect(0, 600, 900, 100); // bottom grass
+        g.fillRect(0, 0, 50, 700); // left grass
+        g.fillRect(800, 0, 50, 700); // right grass
+
 
         Color c2 = Color.black;
         g.setColor(c2);
