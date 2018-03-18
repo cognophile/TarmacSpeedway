@@ -31,3 +31,8 @@ _'Sources'_ tab on the right.
 - Select the `src` directory and mark as _'Sources'_, `src/test` as _'Tests'_, and `src/main/resources` as _'Resources'_. Click _'OK'_.
 
 - Configure a runner: _'Run'_ > _'Run...'_ or _'Edit configurations...'_ > set the class path to `main.java.ApplicationLauncher`.
+
+## Using Part B
+- Compile and run `UDPServerDaemon.java` through a fresh terminal window.
+
+- Compile and run (or build and run via an IDE) `ApplicationLauncher.java` through another fresh terminal.  
