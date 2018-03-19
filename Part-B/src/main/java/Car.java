@@ -72,18 +72,53 @@ public class Car
 
     public void turnLeft()
     {
-        // determine what new direction image to load from the existing.
-        //  Eg. if 1, load 13. If 5, load 1. If 9, load 13. If 13, load 9.
-        this.setCurrentDirection(13);
-        this.setLocation(this.getTrackPosition().x - 10, this.getTrackPosition().y);
+        // Todo: Iterate through the images between these bounds to make the turn gradual
+        if (this.currentDirection == 1) {
+            this.setCurrentDirection(13);
+            return;
+        }
 
+        if (this.currentDirection == 5) {
+            this.setCurrentDirection(1);
+            return;
+        }
+
+        if (this.currentDirection == 9) {
+            this.setCurrentDirection(5);
+            return;
+        }
+
+        if (this.currentDirection == 13) {
+            this.setCurrentDirection(9);
+            return;
+        }
+
+        this.setLocation(this.getTrackPosition().x - 10, this.getTrackPosition().y);
     }
 
     public void turnRight()
     {
-        // determine what new direction image to load from the existing.
-        //  Eg. if 1, load 5. If 5, load 9. If 9, load 13. If 13, load 1.
-        this.setCurrentDirection(5);
+        // Todo: Iterate through the images between these bounds to make the turn gradual
+        if (this.currentDirection == 1) {
+            this.setCurrentDirection(5);
+            return;
+        }
+
+        if (this.currentDirection == 5) {
+            this.setCurrentDirection(9);
+            return;
+        }
+
+        if (this.currentDirection == 9) {
+            this.setCurrentDirection(13);
+            return;
+        }
+
+        if (this.currentDirection == 13) {
+            this.setCurrentDirection(1);
+            return;
+        }
+
         this.setLocation(this.getTrackPosition().x + 10, this.getTrackPosition().y);
     }
 
