@@ -42,26 +42,21 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
         this.setBackground(Color.gray);
 
-        Color c1 = Color.green;
-        g.setColor(c1);
+        g.setColor(Color.green);
         g.fillRect(150, 200, 550, 300); // centre grass
         g.fillRect(0, 0, 900, 100); // top grass
         g.fillRect(0, 600, 900, 100); // bottom grass
         g.fillRect(0, 0, 50, 700); // left grass
         g.fillRect(800, 0, 50, 700); // right grass
 
-
-        Color c2 = Color.black;
-        g.setColor(c2);
+        g.setColor(Color.black);
         g.drawRect(50, 100, 750, 500);  // outer edge
         g.drawRect(150, 200, 550, 300); // inner edge
 
-        Color c3 = Color.yellow;
-        g.setColor( c3 );
+        g.setColor(Color.yellow);
         g.drawRect(100, 150, 650, 400); // mid-lane marker
 
-        Color c4 = Color.white;
-        g.setColor(c4);
+        g.setColor(Color.white);
         g.drawLine(425, 500, 425, 600); // start line
 
         this.drawRedCar(g);
