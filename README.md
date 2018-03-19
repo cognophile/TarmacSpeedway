@@ -32,7 +32,7 @@ _'Sources'_ tab on the right.
 
 - Configure a runner: _'Run'_ > _'Run...'_ or _'Edit configurations...'_ > set the class path to `main.java.ApplicationLauncher`.
 
-## Using Part B
-- Compile and run `UDPServerDaemon.java` through a fresh terminal window.
+## Using Part C
+- Compile and run `TCPServerDaemon.java` through a fresh terminal window.
 
-- Compile and run (or build and run via an IDE) `ApplicationLauncher.java` through another fresh terminal.  
+- Compile and run `ApplicationLauncher.java` and all other classes contained in the `client` subdirectory through another fresh terminal (or build and run via an IDE).
