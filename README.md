@@ -5,7 +5,7 @@ A distributed client-server 2-player arcade, F1 racing game, optionally running 
 
 `Part-A` - A simple game splash screen, with a spinning car image.
 
-`Part-B` - A localhost client-server 2-player version of the game. Both players play on the same machine, using two control key sets. This is based on part A (splash screen to load client and server).
+`Part-B` - A local client 2-player version of the game. Both players play on the same machine, using two control key sets. This is based on part A (splash screen to load client and server).
 
 `Part-C` - A distributed version of the client-server 2-player game. Each player has their own client, and the server is independant. This is based on part A to load the client; the server is loaded independantly. 
 
