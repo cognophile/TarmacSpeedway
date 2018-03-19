@@ -96,48 +96,40 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         switch(key)
         {
             case KeyEvent.VK_UP:
-                System.out.println("Pressed - Red: Speed increase");
+                this.redCar.increaseSpeed();
+
                 this.redCar.setLocation(this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y - 10);
-                this.redCar.setCurrentDirection(1);
                 break;
             case KeyEvent.VK_DOWN:
-                System.out.println("Pressed - Red: Speed decrease");
+                this.redCar.decreaseSpeed();
+
                 this.redCar.setLocation(this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y + 10);
-                this.redCar.setCurrentDirection(9);
                 break;
             case KeyEvent.VK_LEFT:
-                System.out.println("Pressed - Red: Turn left");
-                this.redCar.setLocation(this.redCar.getTrackPosition().x - 10, this.redCar.getTrackPosition().y);
-                this.redCar.setCurrentDirection(13);
+                this.redCar.turnLeft();
                 break;
             case KeyEvent.VK_RIGHT:
-                System.out.println("Pressed - Red: Turn right");
-                this.redCar.setLocation(this.redCar.getTrackPosition().x + 10, this.redCar.getTrackPosition().y);
-                this.redCar.setCurrentDirection(5);
+                this.redCar.turnRight();
                 break;
         }
 
         switch(key)
         {
             case KeyEvent.VK_W:
-                System.out.println("Pressed - Green: Speed increase");
+                this.greenCar.increaseSpeed();
+
                 this.greenCar.setLocation(this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y - 10);
-                this.greenCar.setCurrentDirection(1);
                 break;
             case KeyEvent.VK_S:
-                System.out.println("Pressed - Green: Speed decrease");
+                this.greenCar.decreaseSpeed();
+
                 this.greenCar.setLocation(this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y + 10);
-                this.greenCar.setCurrentDirection(9);
                 break;
             case KeyEvent.VK_A:
-                System.out.println("Pressed - Green: Turn left");
-                this.greenCar.setLocation(this.greenCar.getTrackPosition().x - 10, this.greenCar.getTrackPosition().y);
-                this.greenCar.setCurrentDirection(13);
+                this.greenCar.turnLeft();
                 break;
             case KeyEvent.VK_D:
-                System.out.println("Pressed - Green: Turn right");
-                this.greenCar.setLocation(this.greenCar.getTrackPosition().x + 10, this.greenCar.getTrackPosition().y);
-                this.greenCar.setCurrentDirection(5);
+                this.greenCar.turnRight();
                 break;
         }
     }

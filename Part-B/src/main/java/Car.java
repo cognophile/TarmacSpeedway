@@ -13,9 +13,9 @@ public class Car
 
     private Map<String, ImageIcon> carImages;
     private String COLOUR;
-    private int speed;
-    private Point trackPosition = new Point();
+    private int speed = 0;
     private int currentDirection = 13;
+    private Point trackPosition = new Point();
 
     public Car(String colour)
     {
@@ -56,9 +56,35 @@ public class Car
         return this.getImagePrefix() + String.valueOf(index) + this.getImageSuffix();
     }
 
-    public void setSpeed(int speed)
+    public void increaseSpeed()
     {
-        this.speed = speed;
+        if (this.speed >= 0 && this.speed < 100) {
+            this.speed += 20;
+        }
+    }
+
+    public void decreaseSpeed()
+    {
+        if (this.speed > 0 && this.speed < 100) {
+            this.speed -= 20;
+        }
+    }
+
+    public void turnLeft()
+    {
+        // determine what new direction image to load from the existing.
+        //  Eg. if 1, load 13. If 5, load 1. If 9, load 13. If 13, load 9.
+        this.setCurrentDirection(13);
+        this.setLocation(this.getTrackPosition().x - 10, this.getTrackPosition().y);
+
+    }
+
+    public void turnRight()
+    {
+        // determine what new direction image to load from the existing.
+        //  Eg. if 1, load 5. If 5, load 9. If 9, load 13. If 13, load 1.
+        this.setCurrentDirection(5);
+        this.setLocation(this.getTrackPosition().x + 10, this.getTrackPosition().y);
     }
 
     public int getSpeed()
@@ -81,7 +107,7 @@ public class Car
         return this.currentDirection;
     }
 
-    public void setCurrentDirection(int currentDirection)
+    private void setCurrentDirection(int currentDirection)
     {
         this.currentDirection = currentDirection;
     }
