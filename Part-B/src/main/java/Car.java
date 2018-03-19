@@ -1,6 +1,7 @@
 package main.java;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,8 +10,12 @@ public class Car
     private static final String RED_CAR_FILE_PREFIX = "red_small_";
     private static final String GREEN_CAR_FILE_PREFIX = "green_small_";
     private static final String IMAGE_SUFFIX = ".png";
+
     private Map<String, ImageIcon> carImages;
     private String COLOUR;
+    private int speed;
+    private Point trackPosition = new Point();
+    private int currentDirection = 13;
 
     public Car(String colour)
     {
@@ -49,6 +54,36 @@ public class Car
     public String getImageFilenameByIndex(int index)
     {
         return this.getImagePrefix() + String.valueOf(index) + this.getImageSuffix();
+    }
+
+    public void setSpeed(int speed)
+    {
+        this.speed = speed;
+    }
+
+    public int getSpeed()
+    {
+        return this.speed;
+    }
+
+    public void setLocation(int x, int y)
+    {
+        this.trackPosition.setLocation(x, y);
+    }
+
+    public Point getTrackPosition()
+    {
+        return this.trackPosition.getLocation();
+    }
+
+    public int getCurrentDirection()
+    {
+        return this.currentDirection;
+    }
+
+    public void setCurrentDirection(int currentDirection)
+    {
+        this.currentDirection = currentDirection;
     }
 
     private String getImagePrefix()
