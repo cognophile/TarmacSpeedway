@@ -12,7 +12,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 {
     private Car redCar;
     private Car greenCar;
-    private Timer timer = new Timer(250, this);
+    private Timer timer = new Timer(175, this);
 
     public TrackPanel()
     {
@@ -65,45 +65,38 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private void drawRedCar(Graphics g)
     {
-        ImageIcon red = this.redCar.getImage(this.redCar.getImageFilenameByIndex(this.redCar.getCurrentDirection()));
-        red.paintIcon(this, g, this.redCar.getTrackPosition().x , this.redCar.getTrackPosition().y);
+        ImageIcon red = this.redCar.getImage(this.redCar.getImageFilenameByIndex(this.redCar.getImageOrientation()));
+        red.paintIcon(this, g, this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y);
+
+        this.redCar.drive();
     }
 
     private void drawGreenCar(Graphics g)
     {
-        ImageIcon green = this.greenCar.getImage(this.greenCar.getImageFilenameByIndex(this.greenCar.getCurrentDirection()));
-        green.paintIcon(this, g, this.greenCar.getTrackPosition().x , this.greenCar.getTrackPosition().y);
+        ImageIcon green = this.greenCar.getImage(this.greenCar.getImageFilenameByIndex(this.greenCar.getImageOrientation()));
+        green.paintIcon(this, g, this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y);
+
+        this.greenCar.drive();
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e)
+    {
 
     }
 
-    /*
-         Very primitive attempt to move the cars. The end product, once this is refactored, will
-         move the car at a constant speed, handled through the JPanel refresh rate (timer), and
-         will change direction by slowly incrementing and decrementing through the car image indexes
-         and redefine the current polar direction according to the track.
-
-         This does have some latency issues, and since the client is not multi-threaded, only one
-         key press can be registered at a time. Thus, only one car can move at a time.
-     */
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e)
+    {
         int key = e.getKeyCode();
 
         switch(key)
         {
             case KeyEvent.VK_UP:
                 this.redCar.increaseSpeed();
-
-                this.redCar.setLocation(this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y - 10);
                 break;
             case KeyEvent.VK_DOWN:
                 this.redCar.decreaseSpeed();
-
-                this.redCar.setLocation(this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y + 10);
                 break;
             case KeyEvent.VK_LEFT:
                 this.redCar.turnLeft();
@@ -117,13 +110,9 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         {
             case KeyEvent.VK_W:
                 this.greenCar.increaseSpeed();
-
-                this.greenCar.setLocation(this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y - 10);
                 break;
             case KeyEvent.VK_S:
                 this.greenCar.decreaseSpeed();
-
-                this.greenCar.setLocation(this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y + 10);
                 break;
             case KeyEvent.VK_A:
                 this.greenCar.turnLeft();
@@ -135,7 +124,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
 
     }
 }

@@ -14,8 +14,9 @@ public class Car
     private Map<String, ImageIcon> carImages;
     private String COLOUR;
     private int speed = 0;
-    private int currentDirection = 13;
+    private int activeOrientation = 13;
     private Point trackPosition = new Point();
+    private String trajectory = "left";
 
     public Car(String colour)
     {
@@ -30,6 +31,10 @@ public class Car
         }
     }
 
+    /**
+     * Retrieve all car images for the set colour of car
+     * @return Map<String, ImageIcon> Map of image filenames to their image icon objects
+     */
     public Map<String, ImageIcon> getAllImages()
     {
         return this.carImages;
@@ -47,8 +52,8 @@ public class Car
 
     /**
      * Get the name of an image, by index number
-     * 1 = 0 Deg., 16 = 338 Deg.
-     * @param index
+     * 1 = 0 Deg., 16 = 338 Deg., by 22 Deg.
+     * @param index Number index of the image to load
      * @return ImageIcon of car colour specified
      */
     public String getImageFilenameByIndex(int index)
@@ -56,75 +61,122 @@ public class Car
         return this.getImagePrefix() + String.valueOf(index) + this.getImageSuffix();
     }
 
+    /**
+     * Increase the speed at which the cars moves
+     */
     public void increaseSpeed()
     {
         if (this.speed >= 0 && this.speed < 100) {
-            this.speed += 20;
+            this.speed += 10;
         }
     }
 
+    /**
+     * Decrease the speed at which the car moves
+     */
     public void decreaseSpeed()
     {
         if (this.speed > 0 && this.speed < 100) {
-            this.speed -= 20;
+            this.speed -= 10;
         }
     }
 
+    /**
+     * Set the direction of travel for this car object.
+     * @param trajectory String The direction for the car image to move (up, down, left, right)
+     */
+    public void setTrajectory(String trajectory)
+    {
+        this.trajectory = trajectory;
+    }
+
+    /**
+     * Adjust this objects XY position relative to its speed, according to its trajectory.
+     */
+    public void drive()
+    {
+        if (this.trajectory.equals("up"))
+        {
+            this.setLocation(this.getTrackPosition().x, this.getTrackPosition().y - 2 * this.speed);
+        }
+
+        if (this.trajectory.equals("down"))
+        {
+            this.setLocation(this.getTrackPosition().x, this.getTrackPosition().y + 2 * this.speed);
+        }
+
+        if (this.trajectory.equals("left"))
+        {
+            this.setLocation(this.getTrackPosition().x - 2 * this.speed, this.getTrackPosition().y);
+        }
+
+        if (this.trajectory.equals("right"))
+        {
+            this.setLocation(this.getTrackPosition().x + 2 * this.speed, this.getTrackPosition().y);
+        }
+    }
+
+    /**
+     * Rotate the cars current image left and direction of travel accordingly
+     */
     public void turnLeft()
     {
         // Todo: Iterate through the images between these bounds to make the turn gradual
-        if (this.currentDirection == 1) {
-            this.setCurrentDirection(13);
+        if (this.activeOrientation == 1) {
+            this.setImageOrientation(13);
+            this.setTrajectory("left");
             return;
         }
 
-        if (this.currentDirection == 5) {
-            this.setCurrentDirection(1);
+        if (this.activeOrientation == 5) {
+            this.setImageOrientation(1);
+            this.setTrajectory("up");
             return;
         }
 
-        if (this.currentDirection == 9) {
-            this.setCurrentDirection(5);
+        if (this.activeOrientation == 9) {
+            this.setImageOrientation(5);
+            this.setTrajectory("right");
             return;
         }
 
-        if (this.currentDirection == 13) {
-            this.setCurrentDirection(9);
+        if (this.activeOrientation == 13) {
+            this.setImageOrientation(9);
+            this.setTrajectory("down");
             return;
         }
-
-        this.setLocation(this.getTrackPosition().x - 10, this.getTrackPosition().y);
     }
 
+    /**
+     * Rotate the cars current image right and direction of travel accordingly
+     */
     public void turnRight()
     {
         // Todo: Iterate through the images between these bounds to make the turn gradual
-        if (this.currentDirection == 1) {
-            this.setCurrentDirection(5);
+        if (this.activeOrientation == 1) {
+            this.setImageOrientation(5);
+            this.setTrajectory("right");
+
             return;
         }
 
-        if (this.currentDirection == 5) {
-            this.setCurrentDirection(9);
+        if (this.activeOrientation == 5) {
+            this.setImageOrientation(9);
+            this.setTrajectory("down");
             return;
         }
 
-        if (this.currentDirection == 9) {
-            this.setCurrentDirection(13);
+        if (this.activeOrientation == 9) {
+            this.setImageOrientation(13);
+            this.setTrajectory("left");
             return;
         }
 
-        if (this.currentDirection == 13) {
-            this.setCurrentDirection(1);
+        if (this.activeOrientation == 13) {
+            this.setImageOrientation(1);
+            this.setTrajectory("up");
             return;
         }
-
-        this.setLocation(this.getTrackPosition().x + 10, this.getTrackPosition().y);
-    }
-
-    public int getSpeed()
-    {
-        return this.speed;
     }
 
     public void setLocation(int x, int y)
@@ -137,16 +189,20 @@ public class Car
         return this.trackPosition.getLocation();
     }
 
-    public int getCurrentDirection()
+    public int getImageOrientation()
     {
-        return this.currentDirection;
+        return this.activeOrientation;
     }
 
-    private void setCurrentDirection(int currentDirection)
+    private void setImageOrientation(int orientation)
     {
-        this.currentDirection = currentDirection;
+        this.activeOrientation = orientation;
     }
 
+    /**
+     * Determine which filename prefix this object has by the colour car it represents
+     * @return String car image filename prefix
+     */
     private String getImagePrefix()
     {
         if (this.COLOUR.toLowerCase().equals("red")) {
@@ -162,6 +218,10 @@ public class Car
         return IMAGE_SUFFIX;
     }
 
+    /**
+     * Load all red car images into the object
+     * @return Map<String, ImageIcon> Map of all red car filenames to their image icon objects
+     */
     private Map<String, ImageIcon> loadRedCarImages()
     {
         try
@@ -182,6 +242,10 @@ public class Car
         }
     }
 
+    /**
+     * Load all green car images into the object
+     * @return Map<String, ImageIcon> Map of all green car filenames to their image icon objects
+     */
     private Map<String, ImageIcon> loadGreenCarImages()
     {
         try
