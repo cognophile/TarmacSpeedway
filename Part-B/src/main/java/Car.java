@@ -233,8 +233,7 @@ public class Car
             // Inform the user an error occurred.
             JOptionPane.showMessageDialog(null,
                     "ERROR: This operating system is not supported!\n" + ex.getMessage(),
-                    "Error!",
-                    JOptionPane.ERROR_MESSAGE);
+                    "Error!", JOptionPane.ERROR_MESSAGE);
 
             // Simulate logging the error
             System.out.println(ex.getMessage());
@@ -257,8 +256,7 @@ public class Car
             // Inform the user an error occurred.
             JOptionPane.showMessageDialog(null,
                     "ERROR: This operating system is not supported!\n" + ex.getMessage(),
-                    "Error!",
-                    JOptionPane.ERROR_MESSAGE);
+                    "Error!", JOptionPane.ERROR_MESSAGE);
 
             // Simulate logging the error
             System.out.println(ex.getMessage());

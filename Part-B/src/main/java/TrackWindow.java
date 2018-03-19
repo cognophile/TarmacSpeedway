@@ -21,5 +21,9 @@ public class TrackWindow
         this.trackWindow.addComponents(this.track);
 
         this.trackWindow.render();
+
+        JOptionPane.showMessageDialog(null,
+                "Engines are running! \n\nLights are green! \n\n Hit W/UP to step on the gas!",
+                "Lights out!", JOptionPane.PLAIN_MESSAGE);
     }
 }

@@ -47,7 +47,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         g.fillRect(0, 0, 900, 100); // top grass
         g.fillRect(0, 600, 900, 100); // bottom grass
         g.fillRect(0, 0, 50, 700); // left grass
-        g.fillRect(800, 0, 50, 700); // right grass
+        g.fillRect(800, 0, 100, 700); // right grass
 
         g.setColor(Color.black);
         g.drawRect(50, 100, 750, 500);  // outer edge
