@@ -23,7 +23,7 @@ public class TrackWindow
         this.trackWindow.render();
 
         JOptionPane.showMessageDialog(null,
-                "Engines are running! \n\nLights are green! \n\n Hit W/UP to step on the gas!",
+                "Engines are running! Lights are green! \n\nHit W/UP to step on the gas! If you crash, hit 'R' to restart!",
                 "Lights out!", JOptionPane.PLAIN_MESSAGE);
     }
 }

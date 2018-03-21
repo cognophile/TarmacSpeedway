@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/* TODO - Refactor class into Red/Green subclasses of Car */
 public class Car
 {
     private static final String RED_CAR_FILE_PREFIX = "red_small_";
@@ -21,8 +22,8 @@ public class Car
     private String COLOUR;
     private int speed = 0;
     private int activeOrientation = 13;
-    private Point trackPosition = new Point();
     private String trajectory = "left";
+    private Point trackPosition = new Point();
 
     public Car(String colour)
     {
@@ -30,12 +31,14 @@ public class Car
         {
             this.COLOUR = colour.toLowerCase();
             this.carImages = this.loadRedCarImages();
+            this.setTrackPosition(425, 490);
         }
 
         if (colour.toLowerCase().equals("green"))
         {
             this.COLOUR = colour.toLowerCase();
             this.carImages = this.loadGreenCarImages();
+            this.setTrackPosition(425, 540);
         }
     }
 
@@ -91,38 +94,34 @@ public class Car
         }
     }
 
-    /**
-     * Set the direction of travel for this car object.
-     * @param trajectory String The direction for the car image to move (up, down, left, right)
-     */
-    public void setTrajectory(String trajectory)
+    public void stop()
     {
-        this.trajectory = trajectory;
+        this.speed = 0;
     }
 
     /**
      * Adjust this objects XY position relative to its speed, according to its trajectory.
      */
-    public void moveCar()
+    public void move()
     {
         if (this.trajectory.equals("up"))
         {
-            this.setLocation(this.getTrackPosition().x, this.getTrackPosition().y - 2 * this.speed);
+            this.setTrackPosition(this.getTrackPosition().x, this.getTrackPosition().y - 2 * this.speed);
         }
 
         if (this.trajectory.equals("down"))
         {
-            this.setLocation(this.getTrackPosition().x, this.getTrackPosition().y + 2 * this.speed);
+            this.setTrackPosition(this.getTrackPosition().x, this.getTrackPosition().y + 2 * this.speed);
         }
 
         if (this.trajectory.equals("left"))
         {
-            this.setLocation(this.getTrackPosition().x - 2 * this.speed, this.getTrackPosition().y);
+            this.setTrackPosition(this.getTrackPosition().x - 2 * this.speed, this.getTrackPosition().y);
         }
 
         if (this.trajectory.equals("right"))
         {
-            this.setLocation(this.getTrackPosition().x + 2 * this.speed, this.getTrackPosition().y);
+            this.setTrackPosition(this.getTrackPosition().x + 2 * this.speed, this.getTrackPosition().y);
         }
     }
 
@@ -233,7 +232,16 @@ public class Car
         }
     }
 
-    public void setLocation(int x, int y)
+    /**
+     * Set the direction of travel for this car object.
+     * @param trajectory String The direction for the car image to move (up, down, left, right)
+     */
+    public void setTrajectory(String trajectory)
+    {
+        this.trajectory = trajectory;
+    }
+
+    public void setTrackPosition(int x, int y)
     {
         this.trackPosition.setLocation(x, y);
     }
@@ -251,6 +259,23 @@ public class Car
     private void setImageOrientation(int orientation)
     {
         this.activeOrientation = orientation;
+    }
+
+    public void reset()
+    {
+        if (this.COLOUR.equals("red"))
+        {
+            this.setTrackPosition(425, 490);
+        }
+
+        if (this.COLOUR.equals("green"))
+        {
+            this.setTrackPosition(425, 540);
+        }
+
+        this.speed = 0;
+        this.trajectory = "left";
+        this.setImageOrientation(DIRECTION_WEST);
     }
 
     /**
