@@ -2,7 +2,6 @@ package main.java;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 abstract public class Car
