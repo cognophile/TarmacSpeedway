@@ -23,6 +23,8 @@ abstract public class Car
     protected Map<String, ImageIcon> images;
     protected Point startPosition = new Point();
 
+    abstract public String getImageFilenameByIndex(int index);
+
     /**
      * Retrieve all car images for the set colour of car
      * @return Map<String, ImageIcon> Map of image filenames to their image icon objects
@@ -234,15 +236,12 @@ abstract public class Car
         return this.activeOrientation;
     }
 
-    abstract public String getImageFilenameByIndex(int index);
-
-    protected final String getImageSuffix()
-    {
-        return IMAGE_SUFFIX;
-    }
-
     protected final void setImageOrientation(int orientation)
     {
         this.activeOrientation = orientation;
+    }
+    protected final String getImageSuffix()
+    {
+        return IMAGE_SUFFIX;
     }
 }
