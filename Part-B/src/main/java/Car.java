@@ -5,50 +5,31 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/* TODO - Refactor class into Red/Green subclasses of Car */
-public class Car
+abstract public class Car
 {
-    private static final String RED_CAR_FILE_PREFIX = "red_small_";
-    private static final String GREEN_CAR_FILE_PREFIX = "green_small_";
-    private static final String IMAGE_SUFFIX = ".png";
+    protected static final String IMAGE_SUFFIX = ".png";
 
-    private static final int DIRECTION_NORTH = 1;
-    private static final int DIRECTION_EAST = 5;
-    private static final int DIRECTION_SOUTH = 9;
-    private static final int DIRECTION_WEST = 13;
-    private static final int FINAL_IMAGE_ROTATION_INDEX = 16;
+    protected static final int DIRECTION_NORTH = 1;
+    protected static final int DIRECTION_EAST = 5;
+    protected static final int DIRECTION_SOUTH = 9;
+    protected static final int DIRECTION_WEST = 13;
+    protected static final int FINAL_IMAGE_ROTATION_INDEX = 16;
 
-    private Map<String, ImageIcon> carImages;
-    private String COLOUR;
-    private int speed = 0;
-    private int activeOrientation = 13;
-    private String trajectory = "left";
-    private Point trackPosition = new Point();
+    protected Map<String, ImageIcon> images;
 
-    public Car(String colour)
-    {
-        if (colour.toLowerCase().equals("red"))
-        {
-            this.COLOUR = colour.toLowerCase();
-            this.carImages = this.loadRedCarImages();
-            this.setTrackPosition(425, 490);
-        }
-
-        if (colour.toLowerCase().equals("green"))
-        {
-            this.COLOUR = colour.toLowerCase();
-            this.carImages = this.loadGreenCarImages();
-            this.setTrackPosition(425, 540);
-        }
-    }
+    protected int speed = 0;
+    protected int activeOrientation = 13;
+    protected String trajectory = "left";
+    protected Point trackPosition = new Point();
+    protected Point startPosition = new Point();
 
     /**
      * Retrieve all car images for the set colour of car
      * @return Map<String, ImageIcon> Map of image filenames to their image icon objects
      */
-    public Map<String, ImageIcon> getAllImages()
+    public final Map<String, ImageIcon> getAllImages()
     {
-        return this.carImages;
+        return this.images;
     }
 
     /**
@@ -56,26 +37,23 @@ public class Car
      * @param key
      * @return ImageIcon of car colour specified
      */
-    public ImageIcon getImage(String key)
+    public final ImageIcon getImage(String key)
     {
-        return this.carImages.get(key);
+        return this.images.get(key);
     }
 
-    /**
-     * Get the name of an image, by index number
-     * 1 = 0 Deg., 16 = 338 Deg., by 22 Deg.
-     * @param index Number index of the image to load
-     * @return ImageIcon of car colour specified
-     */
-    public String getImageFilenameByIndex(int index)
+    public final void reset()
     {
-        return this.getImagePrefix() + String.valueOf(index) + this.getImageSuffix();
+        this.speed = 0;
+        this.trajectory = "left";
+        this.setImageOrientation(DIRECTION_WEST);
+        this.setTrackPosition(this.startPosition.x, this.startPosition.y);
     }
 
     /**
      * Increase the speed at which the cars moves
      */
-    public void increaseSpeed()
+    public final void increaseSpeed()
     {
         if (this.speed >= 0 && this.speed < 100)
         {
@@ -86,7 +64,7 @@ public class Car
     /**
      * Decrease the speed at which the car moves
      */
-    public void decreaseSpeed()
+    public final void decreaseSpeed()
     {
         if (this.speed > 0 && this.speed < 100)
         {
@@ -94,7 +72,7 @@ public class Car
         }
     }
 
-    public void stop()
+    public final void stop()
     {
         this.speed = 0;
     }
@@ -102,7 +80,7 @@ public class Car
     /**
      * Adjust this objects XY position relative to its speed, according to its trajectory.
      */
-    public void move()
+    public final void move()
     {
         if (this.trajectory.equals("up"))
         {
@@ -128,7 +106,7 @@ public class Car
     /**
      * Rotate the cars current image left and direction of travel accordingly
      */
-    public void turnLeft()
+    public final void turnLeft()
     {
         // Subtract a scalar constant to have next loaded image be the first non-absolute orientation in this turn
         if (this.activeOrientation == DIRECTION_NORTH)
@@ -179,7 +157,7 @@ public class Car
     /**
      * Rotate the cars current image right and direction of travel accordingly
      */
-    public void turnRight()
+    public final void turnRight()
     {
         // Add a scalar constant to have next loaded image be the first non-absolute orientation in this turn
         if (this.activeOrientation == DIRECTION_NORTH)
@@ -236,110 +214,35 @@ public class Car
      * Set the direction of travel for this car object.
      * @param trajectory String The direction for the car image to move (up, down, left, right)
      */
-    public void setTrajectory(String trajectory)
+    public final void setTrajectory(String trajectory)
     {
         this.trajectory = trajectory;
     }
 
-    public void setTrackPosition(int x, int y)
+    public final void setTrackPosition(int x, int y)
     {
         this.trackPosition.setLocation(x, y);
     }
 
-    public Point getTrackPosition()
+    public final Point getTrackPosition()
     {
         return this.trackPosition.getLocation();
     }
 
-    public int getImageOrientation()
+    public final int getImageOrientation()
     {
         return this.activeOrientation;
     }
 
-    private void setImageOrientation(int orientation)
-    {
-        this.activeOrientation = orientation;
-    }
+    abstract public String getImageFilenameByIndex(int index);
 
-    public void reset()
-    {
-        if (this.COLOUR.equals("red"))
-        {
-            this.setTrackPosition(425, 490);
-        }
-
-        if (this.COLOUR.equals("green"))
-        {
-            this.setTrackPosition(425, 540);
-        }
-
-        this.speed = 0;
-        this.trajectory = "left";
-        this.setImageOrientation(DIRECTION_WEST);
-    }
-
-    /**
-     * Determine which filename prefix this object has by the colour car it represents
-     * @return String car image filename prefix
-     */
-    private String getImagePrefix()
-    {
-        if (this.COLOUR.toLowerCase().equals("red")) {
-            return RED_CAR_FILE_PREFIX;
-        }
-        else {
-            return GREEN_CAR_FILE_PREFIX;
-        }
-    }
-
-    private String getImageSuffix()
+    protected final String getImageSuffix()
     {
         return IMAGE_SUFFIX;
     }
 
-    /**
-     * Load all red car images into the object
-     * @return Map<String, ImageIcon> Map of all red car filenames to their image icon objects
-     */
-    private Map<String, ImageIcon> loadRedCarImages()
+    protected final void setImageOrientation(int orientation)
     {
-        try
-        {
-            return ImageLoader.loadRedCar();
-        }
-        catch (UnsupportedOperationException ex)
-        {
-            // Inform the user an error occurred.
-            JOptionPane.showMessageDialog(null,
-                    "ERROR: This operating system is not supported!\n" + ex.getMessage(),
-                    "Error!", JOptionPane.ERROR_MESSAGE);
-
-            // Simulate logging the error
-            System.out.println(ex.getMessage());
-            return new HashMap<String, ImageIcon>();
-        }
-    }
-
-    /**
-     * Load all green car images into the object
-     * @return Map<String, ImageIcon> Map of all green car filenames to their image icon objects
-     */
-    private Map<String, ImageIcon> loadGreenCarImages()
-    {
-        try
-        {
-            return ImageLoader.loadGreenCar();
-        }
-        catch (UnsupportedOperationException ex)
-        {
-            // Inform the user an error occurred.
-            JOptionPane.showMessageDialog(null,
-                    "ERROR: This operating system is not supported!\n" + ex.getMessage(),
-                    "Error!", JOptionPane.ERROR_MESSAGE);
-
-            // Simulate logging the error
-            System.out.println(ex.getMessage());
-            return new HashMap<String, ImageIcon>();
-        }
+        this.activeOrientation = orientation;
     }
 }

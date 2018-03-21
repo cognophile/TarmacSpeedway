@@ -24,8 +24,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         this.addKeyListener(this);
         this.setFocusable(true);
 
-        this.redCar = new Car("red");
-        this.greenCar = new Car("green");
+        this.redCar = new RedCar();
+        this.greenCar = new GreenCar();
 
         this.timer.start();
     }

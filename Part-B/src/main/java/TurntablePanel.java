@@ -15,7 +15,7 @@ public class TurntablePanel extends JPanel implements ActionListener
 
     public TurntablePanel()
     {
-        this.redCar = new Car("red");
+        this.redCar = new RedCar();
         this.timer.start();
     }
 
