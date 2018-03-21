@@ -29,7 +29,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         if(e.getSource() == this.timer)
         {
             repaint();
@@ -37,7 +38,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g)
+    {
         super.paintComponent(g);
 
         this.setBackground(Color.gray);
@@ -59,6 +61,12 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         g.setColor(Color.white);
         g.drawLine(425, 500, 425, 600); // start line
 
+        g.setColor(Color.red);
+        g.fillRect(0, 0, 900, 20); // top barrier
+        g.fillRect(0, 680, 900, 20); // bottom barrier
+        g.fillRect(0, 0, 20, 700); // left barrier
+        g.fillRect(825, 0, 20, 700); // right barrier
+
         this.drawRedCar(g);
         this.drawGreenCar(g);
     }
@@ -68,7 +76,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         ImageIcon red = this.redCar.getImage(this.redCar.getImageFilenameByIndex(this.redCar.getImageOrientation()));
         red.paintIcon(this, g, this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y);
 
-        this.redCar.drive();
+        this.redCar.moveCar();
     }
 
     private void drawGreenCar(Graphics g)
@@ -76,7 +84,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         ImageIcon green = this.greenCar.getImage(this.greenCar.getImageFilenameByIndex(this.greenCar.getImageOrientation()));
         green.paintIcon(this, g, this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y);
 
-        this.greenCar.drive();
+        this.greenCar.moveCar();
     }
 
     @Override

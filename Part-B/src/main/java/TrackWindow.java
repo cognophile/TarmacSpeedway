@@ -15,7 +15,7 @@ public class TrackWindow
 
     public void buildWindow()
     {
-        this.trackWindow.setWindowSize(850, 700);
+        this.trackWindow.setWindowSize(860, 735);
 
         this.track.setLayout(new BoxLayout(this.track, BoxLayout.Y_AXIS));
         this.trackWindow.addComponents(this.track);
