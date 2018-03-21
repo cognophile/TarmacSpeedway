@@ -7,20 +7,20 @@ import java.util.Map;
 
 abstract public class Car
 {
-    protected static final String IMAGE_SUFFIX = ".png";
+    private static final String IMAGE_SUFFIX = ".png";
 
-    protected static final int DIRECTION_NORTH = 1;
-    protected static final int DIRECTION_EAST = 5;
-    protected static final int DIRECTION_SOUTH = 9;
-    protected static final int DIRECTION_WEST = 13;
-    protected static final int FINAL_IMAGE_ROTATION_INDEX = 16;
+    private static final int DIRECTION_NORTH = 1;
+    private static final int DIRECTION_EAST = 5;
+    private static final int DIRECTION_SOUTH = 9;
+    private static final int DIRECTION_WEST = 13;
+    private static final int FINAL_IMAGE_ROTATION_INDEX = 16;
+
+    private int speed = 0;
+    private int activeOrientation = 13;
+    private String trajectory = "left";
+    private Point trackPosition = new Point();
 
     protected Map<String, ImageIcon> images;
-
-    protected int speed = 0;
-    protected int activeOrientation = 13;
-    protected String trajectory = "left";
-    protected Point trackPosition = new Point();
     protected Point startPosition = new Point();
 
     /**
