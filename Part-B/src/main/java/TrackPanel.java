@@ -13,7 +13,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     private static final int TOP_BARRIER = 10;
     private static final int BOTTOM_BARRIER = 615;
     private static final int LEFT_BARRIER = 0;
-    private static final int RIGHT_BARRIER= 740;
+    private static final int RIGHT_BARRIER= 760;
 
     private Car redCar;
     private Car greenCar;
