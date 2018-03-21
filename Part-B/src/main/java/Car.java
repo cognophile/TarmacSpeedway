@@ -11,6 +11,12 @@ public class Car
     private static final String GREEN_CAR_FILE_PREFIX = "green_small_";
     private static final String IMAGE_SUFFIX = ".png";
 
+    private static final int DIRECTION_NORTH = 1;
+    private static final int DIRECTION_EAST = 5;
+    private static final int DIRECTION_SOUTH = 9;
+    private static final int DIRECTION_WEST = 13;
+    private static final int FINAL_IMAGE_ROTATION_INDEX = 16;
+
     private Map<String, ImageIcon> carImages;
     private String COLOUR;
     private int speed = 0;
@@ -20,12 +26,14 @@ public class Car
 
     public Car(String colour)
     {
-        if (colour.toLowerCase().equals("red")) {
+        if (colour.toLowerCase().equals("red"))
+        {
             this.COLOUR = colour.toLowerCase();
             this.carImages = this.loadRedCarImages();
         }
 
-        if (colour.toLowerCase().equals("green")) {
+        if (colour.toLowerCase().equals("green"))
+        {
             this.COLOUR = colour.toLowerCase();
             this.carImages = this.loadGreenCarImages();
         }
@@ -66,7 +74,8 @@ public class Car
      */
     public void increaseSpeed()
     {
-        if (this.speed >= 0 && this.speed < 100) {
+        if (this.speed >= 0 && this.speed < 100)
+        {
             this.speed += 10;
         }
     }
@@ -76,7 +85,8 @@ public class Car
      */
     public void decreaseSpeed()
     {
-        if (this.speed > 0 && this.speed < 100) {
+        if (this.speed > 0 && this.speed < 100)
+        {
             this.speed -= 10;
         }
     }
@@ -93,7 +103,7 @@ public class Car
     /**
      * Adjust this objects XY position relative to its speed, according to its trajectory.
      */
-    public void drive()
+    public void moveCar()
     {
         if (this.trajectory.equals("up"))
         {
@@ -121,27 +131,47 @@ public class Car
      */
     public void turnLeft()
     {
-        // Todo: Iterate through the images between these bounds to make the turn gradual
-        if (this.activeOrientation == 1) {
-            this.setImageOrientation(13);
+        // Subtract a scalar constant to have next loaded image be the first non-absolute orientation in this turn
+        if (this.activeOrientation == DIRECTION_NORTH)
+        {
+            for (int i = FINAL_IMAGE_ROTATION_INDEX; i >= DIRECTION_WEST; i--)
+            {
+                this.setImageOrientation(i);
+            }
+
             this.setTrajectory("left");
             return;
         }
 
-        if (this.activeOrientation == 5) {
-            this.setImageOrientation(1);
+        if (this.activeOrientation == DIRECTION_EAST)
+        {
+            for (int i = this.activeOrientation - 1; i >= DIRECTION_NORTH; i--)
+            {
+                this.setImageOrientation(i);
+            }
+
             this.setTrajectory("up");
             return;
         }
 
-        if (this.activeOrientation == 9) {
-            this.setImageOrientation(5);
+        if (this.activeOrientation == DIRECTION_SOUTH)
+        {
+            for (int i = this.activeOrientation - 1; i >= DIRECTION_EAST; i--)
+            {
+                this.setImageOrientation(i);
+            }
+
             this.setTrajectory("right");
             return;
         }
 
-        if (this.activeOrientation == 13) {
-            this.setImageOrientation(9);
+        if (this.activeOrientation == DIRECTION_WEST)
+        {
+            for (int i = this.activeOrientation - 1; i >= DIRECTION_SOUTH; i--)
+            {
+                this.setImageOrientation(i);
+            }
+
             this.setTrajectory("down");
             return;
         }
@@ -152,28 +182,52 @@ public class Car
      */
     public void turnRight()
     {
-        // Todo: Iterate through the images between these bounds to make the turn gradual
-        if (this.activeOrientation == 1) {
-            this.setImageOrientation(5);
-            this.setTrajectory("right");
+        // Add a scalar constant to have next loaded image be the first non-absolute orientation in this turn
+        if (this.activeOrientation == DIRECTION_NORTH)
+        {
+            for (int i = this.activeOrientation + 1; i <= DIRECTION_EAST; i++)
+            {
+                this.setImageOrientation(i);
+            }
 
+            this.setTrajectory("right");
             return;
         }
 
-        if (this.activeOrientation == 5) {
-            this.setImageOrientation(9);
+        if (this.activeOrientation == DIRECTION_EAST)
+        {
+            for (int i = this.activeOrientation + 1; i <= DIRECTION_SOUTH; i++)
+            {
+                this.setImageOrientation(i);
+            }
+
             this.setTrajectory("down");
             return;
         }
 
-        if (this.activeOrientation == 9) {
-            this.setImageOrientation(13);
+        if (this.activeOrientation == DIRECTION_SOUTH)
+        {
+            for (int i = this.activeOrientation + 1; i <= DIRECTION_WEST; i++)
+            {
+                this.setImageOrientation(i);
+            }
+
             this.setTrajectory("left");
             return;
         }
 
-        if (this.activeOrientation == 13) {
-            this.setImageOrientation(1);
+        if (this.activeOrientation == DIRECTION_WEST)
+        {
+            for (int i = this.activeOrientation + 1; i <= FINAL_IMAGE_ROTATION_INDEX; i++)
+            {
+                if (i == FINAL_IMAGE_ROTATION_INDEX) {
+                    this.setImageOrientation(DIRECTION_NORTH);
+                }
+                else {
+                    this.setImageOrientation(i);
+                }
+            }
+
             this.setTrajectory("up");
             return;
         }
