@@ -7,10 +7,10 @@ import java.util.Map;
 
 public abstract class ImageLoader
 {
-    private static final String RESOURCE_RED_CAR_IMAGES_UNIX = "/src/main/resources/images/red";
-    private static final String RESOURCE_GREEN_CAR_IMAGES_UNIX = "/src/main/resources/images/green";
-    private static final String RESOURCE_RED_CAR_IMAGES_WINDOWS = "\\src\\main\\resources\\images\\red";
-    private static final String RESOURCE_GREEN_CAR_IMAGES_WINDOWS = "\\src\\main\\resources\\images\\green";
+    private static final String RESOURCE_IMAGES_RED_CAR_NIX = "images/red";
+    private static final String RESOURCE_IMAGES_GREEN_CAR_NIX = "images/green";
+    private static final String RESOURCE_IMAGES_RED_CAR_WIN = "images\\red";
+    private static final String RESOURCE_IMAGES_GREEN_CAR_WIN = "images\\green";
 
     /**
      * Import the images found in 'resources\images\green', independent of platform.
@@ -24,12 +24,12 @@ public abstract class ImageLoader
 
         if (DeviceOS.isUnix() || DeviceOS.isMac())
         {
-            imageDirectory = ImageLoader.getRedCarImagePath(RESOURCE_RED_CAR_IMAGES_UNIX);
+            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_RED_CAR_NIX);
         }
 
         if (DeviceOS.isWindows())
         {
-            imageDirectory = ImageLoader.getRedCarImagePath(RESOURCE_RED_CAR_IMAGES_WINDOWS);
+            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_RED_CAR_WIN);
         }
 
         if (imageDirectory == null)
@@ -62,12 +62,12 @@ public abstract class ImageLoader
 
         if (DeviceOS.isUnix() || DeviceOS.isMac())
         {
-            imageDirectory = ImageLoader.getGreenCarImagePath(RESOURCE_GREEN_CAR_IMAGES_UNIX);
+            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_GREEN_CAR_NIX);
         }
 
         if (DeviceOS.isWindows())
         {
-            imageDirectory = ImageLoader.getGreenCarImagePath(RESOURCE_GREEN_CAR_IMAGES_WINDOWS);
+            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_GREEN_CAR_WIN);
         }
 
         if (imageDirectory == null)
@@ -88,15 +88,11 @@ public abstract class ImageLoader
         return carImageMap;
     }
 
-    private final static File getRedCarImagePath(String resourcePath)
+    private final static File createPathToImageDirectory(String imagePath)
     {
-        String systemPath = new File("").getAbsolutePath();
-        return new File(systemPath + resourcePath);
-    }
+        String resourceUri = ImageLoader.class.getResource("../resources/").toString();
+        String resourcePath = resourceUri.substring(resourceUri.indexOf("/")+1);
 
-    private final static File getGreenCarImagePath(String resourcePath)
-    {
-        String systemPath = new File("").getAbsolutePath();
-        return new File(systemPath + resourcePath);
+        return new File(resourcePath + imagePath);
     }
 }
