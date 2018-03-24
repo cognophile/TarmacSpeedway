@@ -24,12 +24,12 @@ public abstract class ImageLoader
 
         if (DeviceOS.isUnix() || DeviceOS.isMac())
         {
-            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_RED_CAR_NIX);
+            imageDirectory = ImageLoader.createPathToImageDirectoryUnix(RESOURCE_IMAGES_RED_CAR_NIX);
         }
 
         if (DeviceOS.isWindows())
         {
-            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_RED_CAR_WIN);
+            imageDirectory = ImageLoader.createPathToImageDirectoryWindows(RESOURCE_IMAGES_RED_CAR_WIN);
         }
 
         if (imageDirectory == null)
@@ -62,12 +62,12 @@ public abstract class ImageLoader
 
         if (DeviceOS.isUnix() || DeviceOS.isMac())
         {
-            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_GREEN_CAR_NIX);
+            imageDirectory = ImageLoader.createPathToImageDirectoryUnix(RESOURCE_IMAGES_GREEN_CAR_NIX);
         }
 
         if (DeviceOS.isWindows())
         {
-            imageDirectory = ImageLoader.createPathToImageDirectory(RESOURCE_IMAGES_GREEN_CAR_WIN);
+            imageDirectory = ImageLoader.createPathToImageDirectoryWindows(RESOURCE_IMAGES_GREEN_CAR_WIN);
         }
 
         if (imageDirectory == null)
@@ -88,11 +88,19 @@ public abstract class ImageLoader
         return carImageMap;
     }
 
-    private final static File createPathToImageDirectory(String imagePath)
+    private final static File createPathToImageDirectoryWindows(String imagePath)
     {
         String resourceUri = ImageLoader.class.getResource("../resources/").toString();
         String resourcePath = resourceUri.substring(resourceUri.indexOf("/")+1);
 
         return new File(resourcePath + imagePath);
+    }
+
+    private final static File createPathToImageDirectoryUnix(String imagePath)
+    {
+        String resourceUri = ImageLoader.class.getResource("../resources/").toString();
+        String resourcePath = resourceUri.substring(resourceUri.indexOf("/")+1);
+
+        return new File("/" + resourcePath + imagePath);
     }
 }
