@@ -1,5 +1,7 @@
 package main.java.client;
 
+import main.java.utilities.ErrorLogger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,10 +14,24 @@ public class SplashWindow implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        TrackWindow track = new TrackWindow();
-        track.buildWindow();
+        try {
+            NetworkManager remoteConnection = new NetworkManager();
+            boolean isAvailable = remoteConnection.send("ahoy");
 
-        this.splash.close();
+            if (isAvailable) {
+                TrackWindow track = new TrackWindow();
+                track.buildWindow();
+
+                this.splash.close();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "ERROR: Remote Connection Unavailable!",
+                        "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        catch (Exception ex) {
+            ErrorLogger.toConsole(ex);
+        }
     }
 
     public final void start()
