@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 public class SplashWindow implements ActionListener
 {
     private BaseWindow splash;
-    private JButton startGameButton;
 
     @Override
     public void actionPerformed(ActionEvent e)
@@ -28,7 +27,9 @@ public class SplashWindow implements ActionListener
         // Create the main and supplementary panels, and components
         JPanel mainPanel = new JPanel();
         HeaderPanel titleLabel = new HeaderPanel("Welcome to the pit lane!");
-        this.startGameButton = new JButton("Let's Race!");
+        JButton selectRedCar = new JButton("Red Car");
+        JButton selectGreenCar = new JButton("Green Car");
+        JButton startGameButton = new JButton("Race");
 
         // Create the panel that will host the images
         TurntablePanel animationPanel = new TurntablePanel();
@@ -40,15 +41,23 @@ public class SplashWindow implements ActionListener
         titleLabel.setMaximumSize(new Dimension(600, 50));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        animationPanel.setMaximumSize(new Dimension(600, 500));
+        animationPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        selectRedCar.setMaximumSize(new Dimension(120, 25));
+        selectRedCar.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        selectGreenCar.setMaximumSize(new Dimension(120, 25));
+        selectGreenCar.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         startGameButton.setMaximumSize(new Dimension(120, 25));
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startGameButton.addActionListener(this);
 
-        animationPanel.setMaximumSize(new Dimension(600, 500));
-        animationPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         // Add panel elements to a container panel
         mainPanel.add(titleLabel);
+        mainPanel.add(selectRedCar);
+        mainPanel.add(selectGreenCar);
         mainPanel.add(animationPanel);
         mainPanel.add(startGameButton);
 
