@@ -48,7 +48,6 @@ public class ServerReceiver
             while((receivedMessage = this.senderInputStream.readLine()) != null)
             {
                 if (receivedMessage.contains("ahoy")) {
-                    this.reply("connected");
                     return;
                 }
 
