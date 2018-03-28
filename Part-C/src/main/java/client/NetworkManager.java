@@ -28,18 +28,22 @@ public class NetworkManager
         }
     }
 
-    public void send(String request)
+    public boolean send(String request) throws RuntimeException
     {
         if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.outputStream) && Helper.isNotNull(this.inputStream))
         {
             try {
                 outputStream.writeBytes(request);
                 outputStream.flush();
+                return true;
             }
             catch (IOException ex) {
                 ErrorLogger.toConsole(ex);
+                return false;
             }
         }
+
+        throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
     public void listen()
