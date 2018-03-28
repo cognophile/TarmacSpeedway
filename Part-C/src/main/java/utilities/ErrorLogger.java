@@ -6,6 +6,12 @@ public abstract class ErrorLogger
 {
     public static void toConsole(Exception ex)
     {
-        System.out.println(ex.getMessage() + "\n" + Arrays.toString(ex.getStackTrace()));
+        StringBuilder stackTrace = new StringBuilder();
+        for (StackTraceElement element : ex.getStackTrace()) {
+            stackTrace.append(element.toString());
+            stackTrace.append("\n");
+        }
+        System.out.println(ex.getMessage() + "\n" + stackTrace.toString());
     }
 }
+
