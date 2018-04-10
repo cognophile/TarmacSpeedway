@@ -15,17 +15,22 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     private static final int LEFT_BARRIER = 0;
     private static final int RIGHT_BARRIER= 760;
 
-    private Car redCar;
-    private Car greenCar;
+    private Car locallyControlledCar;
+    private Car remoteControlledCar;
     private Timer timer = new Timer(175, this);
 
-    public TrackPanel()
+    public TrackPanel(String selectedColour)
     {
         this.addKeyListener(this);
         this.setFocusable(true);
 
-        this.redCar = new RedCar();
-        this.greenCar = new GreenCar();
+        if (selectedColour.equals("red")) {
+            this.locallyControlledCar = new RedCar();
+            this.remoteControlledCar = new GreenCar();
+        } else {
+            this.locallyControlledCar = new GreenCar();
+            this.remoteControlledCar = new RedCar();
+        }
 
         this.timer.start();
     }
@@ -69,44 +74,44 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         g.fillRect(0, 0, 10, 700); // left barrier
         g.fillRect(835, 0, 10, 700); // right barrier
 
-        this.drawRedCar(g);
-        this.drawGreenCar(g);
+        this.drawLocalCar(g);
+        this.drawRemoteCar(g);
     }
 
-    private void drawRedCar(Graphics g)
+    private void drawLocalCar(Graphics g)
     {
-        ImageIcon red = this.redCar.getImage(this.redCar.getImageFilenameByIndex(this.redCar.getImageOrientation()));
-        red.paintIcon(this, g, this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y);
+        String filename = this.locallyControlledCar.getImageFilenameByIndex(this.locallyControlledCar.getImageOrientation());
+        ImageIcon controlled = this.locallyControlledCar.getImage(filename);
+        controlled.paintIcon(this, g, this.locallyControlledCar.getTrackPosition().x, this.locallyControlledCar.getTrackPosition().y);
 
-        if (this.redCar.getTrackPosition().x <= LEFT_BARRIER || this.redCar.getTrackPosition().x >= RIGHT_BARRIER
-                || this.redCar.getTrackPosition().y <= TOP_BARRIER || this.redCar.getTrackPosition().y >= BOTTOM_BARRIER)
+        if (this.locallyControlledCar.getTrackPosition().x <= LEFT_BARRIER ||
+                this.locallyControlledCar.getTrackPosition().x >= RIGHT_BARRIER ||
+                this.locallyControlledCar.getTrackPosition().y <= TOP_BARRIER ||
+                this.locallyControlledCar.getTrackPosition().y >= BOTTOM_BARRIER)
         {
-            this.redCar.stop();
+            this.locallyControlledCar.stop();
         }
         else {
-            this.redCar.move();
+            this.locallyControlledCar.move();
         }
     }
 
-    private void drawGreenCar(Graphics g)
+    private void drawRemoteCar(Graphics g)
     {
-        ImageIcon green = this.greenCar.getImage(this.greenCar.getImageFilenameByIndex(this.greenCar.getImageOrientation()));
-        green.paintIcon(this, g, this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y);
+        String filename = this.remoteControlledCar.getImageFilenameByIndex(this.remoteControlledCar.getImageOrientation());
+        ImageIcon remote = this.remoteControlledCar.getImage(filename);
+        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y);
 
-        if (this.greenCar.getTrackPosition().x <= LEFT_BARRIER || this.greenCar.getTrackPosition().x >= RIGHT_BARRIER
-                || this.greenCar.getTrackPosition().y <= TOP_BARRIER || this.greenCar.getTrackPosition().y >= BOTTOM_BARRIER)
+        if (this.remoteControlledCar.getTrackPosition().x <= LEFT_BARRIER ||
+                this.remoteControlledCar.getTrackPosition().x >= RIGHT_BARRIER ||
+                this.remoteControlledCar.getTrackPosition().y <= TOP_BARRIER ||
+                this.remoteControlledCar.getTrackPosition().y >= BOTTOM_BARRIER)
         {
-            this.greenCar.stop();
+            this.remoteControlledCar.stop();
         }
         else {
-            this.greenCar.move();
+            this.remoteControlledCar.move();
         }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e)
-    {
-
     }
 
     @Override
@@ -116,46 +121,29 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
         if (key == KeyEvent.VK_R)
         {
-            this.redCar.reset();
-            this.greenCar.reset();
+            this.locallyControlledCar.reset();
+            this.remoteControlledCar.reset();
         }
 
         switch(key)
         {
             case KeyEvent.VK_UP:
-                this.redCar.increaseSpeed();
+                this.locallyControlledCar.increaseSpeed();
                 break;
             case KeyEvent.VK_DOWN:
-                this.redCar.decreaseSpeed();
+                this.locallyControlledCar.decreaseSpeed();
                 break;
             case KeyEvent.VK_LEFT:
-                this.redCar.turnLeft();
+                this.locallyControlledCar.turnLeft();
                 break;
             case KeyEvent.VK_RIGHT:
-                this.redCar.turnRight();
-                break;
-        }
-
-        switch(key)
-        {
-            case KeyEvent.VK_W:
-                this.greenCar.increaseSpeed();
-                break;
-            case KeyEvent.VK_S:
-                this.greenCar.decreaseSpeed();
-                break;
-            case KeyEvent.VK_A:
-                this.greenCar.turnLeft();
-                break;
-            case KeyEvent.VK_D:
-                this.greenCar.turnRight();
+                this.locallyControlledCar.turnRight();
                 break;
         }
     }
+    @Override
+    public void keyTyped(KeyEvent e) { }
 
     @Override
-    public void keyReleased(KeyEvent e)
-    {
-
-    }
+    public void keyReleased(KeyEvent e) { }
 }

@@ -7,10 +7,10 @@ public class TrackWindow
     private BaseWindow trackWindow;
     private TrackPanel track;
 
-    public TrackWindow()
+    public TrackWindow(String selectedColour)
     {
         this.trackWindow = new BaseWindow("TarmacSpeedway: Track");
-        this.track = new TrackPanel();
+        this.track = new TrackPanel(selectedColour);
     }
 
     public void buildWindow()
