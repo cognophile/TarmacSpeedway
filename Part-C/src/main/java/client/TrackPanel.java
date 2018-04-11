@@ -127,16 +127,16 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
         switch(key)
         {
-            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
                 this.locallyControlledCar.increaseSpeed();
                 break;
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
                 this.locallyControlledCar.decreaseSpeed();
                 break;
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 this.locallyControlledCar.turnLeft();
                 break;
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 this.locallyControlledCar.turnRight();
                 break;
         }
