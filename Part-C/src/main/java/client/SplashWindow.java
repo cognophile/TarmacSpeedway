@@ -95,11 +95,11 @@ public class SplashWindow implements ActionListener
     {
         try {
             this.remoteConnection.open();
-            boolean isAvailable = this.remoteConnection.send(":ahoy");
+            boolean isAvailable = this.remoteConnection.sendAndAwait(":ahoy");
             // Send another message to server to identify which car this client controls
 
             if (isAvailable) {
-                TrackWindow track = new TrackWindow(this.selectedColour);
+                TrackWindow track = new TrackWindow(this.remoteConnection, this.selectedColour);
                 track.buildWindow();
 
                 this.splash.close();

@@ -17,12 +17,15 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private Car locallyControlledCar;
     private Car remoteControlledCar;
+    private NetworkManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
-    public TrackPanel(String selectedColour)
+    public TrackPanel(NetworkManager remoteConnection, String selectedColour)
     {
         this.addKeyListener(this);
         this.setFocusable(true);
+
+        this.remoteConnection = remoteConnection;
 
         if (selectedColour.equals("red")) {
             this.locallyControlledCar = new RedCar();

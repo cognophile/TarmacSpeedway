@@ -28,7 +28,7 @@ public class BaseWindow extends JFrame
         this.loadComponents();
         this.window.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
-            System.exit(0);
+                System.exit(0);
             }
         });
 

@@ -12,7 +12,7 @@ public class NetworkManager
 {
     private Socket socket;
     private int remotePort = 0;
-    private static final String remoteAddress = "127.0.0.1";
+    private static final String remoteAddress = "localhost";
     private DataOutputStream outputStream;
     private BufferedReader inputStream;
 
@@ -43,7 +43,7 @@ public class NetworkManager
         if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.outputStream) && Helper.isNotNull(this.inputStream))
         {
             try {
-                outputStream.writeBytes(request);
+                outputStream.writeBytes(request  + "\n");
                 outputStream.flush();
                 return true;
             }
@@ -53,6 +53,32 @@ public class NetworkManager
             }
         }
 
+        throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
+    }
+
+    public boolean sendAndAwait(String request) throws RuntimeException
+    {
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.outputStream) && Helper.isNotNull(this.inputStream))
+        {
+            try {
+                outputStream.writeBytes(request  + "\n");
+                outputStream.flush();
+
+                String response;
+                while ((response = inputStream.readLine()) != null) {
+                    if (response.contains("available")) {
+                       return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+            catch (IOException ex) {
+                ErrorLogger.toConsole(ex);
+                return false;
+            }
+        }
         throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
