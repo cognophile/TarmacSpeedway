@@ -220,6 +220,11 @@ abstract public class Car
         this.trajectory = trajectory;
     }
 
+    public final String getTrajectory()
+    {
+        return this.trajectory;
+    }
+
     public final void setTrackPosition(int x, int y)
     {
         this.trackPosition.setLocation(x, y);
@@ -233,6 +238,16 @@ abstract public class Car
     public final int getImageOrientation()
     {
         return this.activeOrientation;
+    }
+
+    public final int getSpeed()
+    {
+        return this.speed;
+    }
+
+    public final void setSpeed(int speed)
+    {
+        this.speed = speed;
     }
 
     protected final void setImageOrientation(int orientation)
