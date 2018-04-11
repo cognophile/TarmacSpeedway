@@ -3,8 +3,7 @@ package main.java.client;
 import main.java.utilities.CarDTO;
 
 import javax.swing.*;
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -92,10 +91,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         CarDTO localCarDTO = new CarDTO();
         localCarDTO.speed = this.locallyControlledCar.getSpeed();
 
-        if (this.locallyControlledCar.getTrackPosition().x <= LEFT_BARRIER ||
-                this.locallyControlledCar.getTrackPosition().x >= RIGHT_BARRIER ||
-                this.locallyControlledCar.getTrackPosition().y <= TOP_BARRIER ||
-                this.locallyControlledCar.getTrackPosition().y >= BOTTOM_BARRIER)
+        if (this.isCrashed(this.locallyControlledCar))
         {
             this.locallyControlledCar.stop();
             localCarDTO.speed = this.locallyControlledCar.getSpeed();
@@ -119,9 +115,40 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
         String filename = this.remoteControlledCar.getImageFilenameByIndex(this.remoteControlledCar.getImageOrientation());
         ImageIcon remote = this.remoteControlledCar.getImage(filename);
-        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x - 20, this.remoteControlledCar.getTrackPosition().y - 20);
+        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y - 40);
     }
 
+    private boolean isCrashed(Car car)
+    {
+        if (car.getTrackPosition().x <= LEFT_BARRIER || car.getTrackPosition().x >= RIGHT_BARRIER ||
+                car.getTrackPosition().y <= TOP_BARRIER || car.getTrackPosition().y >= BOTTOM_BARRIER)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean hasCollided()
+    {
+        Rectangle firstCarRectangle = new Rectangle(
+                this.locallyControlledCar.getTrackPosition().x,
+                this.locallyControlledCar.getTrackPosition().y,
+                55, 35
+        );
+
+        Rectangle secondCarRectangle  = new Rectangle(
+                this.remoteControlledCar.getTrackPosition().x,
+                this.remoteControlledCar.getTrackPosition().y,
+                55, 35
+        );
+
+        if (firstCarRectangle.intersects(secondCarRectangle) || secondCarRectangle.intersects(firstCarRectangle)) {
+            return true;
+        }
+
+        return false;
+    }
     @Override
     public void keyPressed(KeyEvent e)
     {
