@@ -1,5 +1,7 @@
 package main.java.client;
 
+import main.java.utilities.CarDTO;
+
 import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -87,34 +89,37 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         ImageIcon controlled = this.locallyControlledCar.getImage(filename);
         controlled.paintIcon(this, g, this.locallyControlledCar.getTrackPosition().x, this.locallyControlledCar.getTrackPosition().y);
 
+        CarDTO localCarDTO = new CarDTO();
+        localCarDTO.speed = this.locallyControlledCar.getSpeed();
+
         if (this.locallyControlledCar.getTrackPosition().x <= LEFT_BARRIER ||
                 this.locallyControlledCar.getTrackPosition().x >= RIGHT_BARRIER ||
                 this.locallyControlledCar.getTrackPosition().y <= TOP_BARRIER ||
                 this.locallyControlledCar.getTrackPosition().y >= BOTTOM_BARRIER)
         {
             this.locallyControlledCar.stop();
+            localCarDTO.speed = this.locallyControlledCar.getSpeed();
         }
         else {
             this.locallyControlledCar.move();
         }
+
+        localCarDTO.position = this.locallyControlledCar.getTrackPosition();
+        localCarDTO.trajectory = this.locallyControlledCar.getTrajectory();
+        localCarDTO.orientation = this.locallyControlledCar.getImageOrientation();
+        this.remoteConnection.send(localCarDTO);
     }
 
     private void drawRemoteCar(Graphics g)
     {
+        CarDTO remoteCarDTO = this.remoteConnection.getRemoteDTO();
+        this.remoteControlledCar.setTrackPosition(remoteCarDTO.position.x, remoteCarDTO.position.y);
+        this.remoteControlledCar.setSpeed(remoteCarDTO.speed);
+        this.remoteControlledCar.setImageOrientation(remoteCarDTO.orientation);
+
         String filename = this.remoteControlledCar.getImageFilenameByIndex(this.remoteControlledCar.getImageOrientation());
         ImageIcon remote = this.remoteControlledCar.getImage(filename);
-        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y);
-
-        if (this.remoteControlledCar.getTrackPosition().x <= LEFT_BARRIER ||
-                this.remoteControlledCar.getTrackPosition().x >= RIGHT_BARRIER ||
-                this.remoteControlledCar.getTrackPosition().y <= TOP_BARRIER ||
-                this.remoteControlledCar.getTrackPosition().y >= BOTTOM_BARRIER)
-        {
-            this.remoteControlledCar.stop();
-        }
-        else {
-            this.remoteControlledCar.move();
-        }
+        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x - 20, this.remoteControlledCar.getTrackPosition().y - 20);
     }
 
     @Override
@@ -144,6 +149,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
                 break;
         }
     }
+
     @Override
     public void keyTyped(KeyEvent e) { }
 

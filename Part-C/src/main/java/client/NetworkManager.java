@@ -2,10 +2,7 @@ package main.java.client;
 
 import main.java.utilities.*;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 
 public class NetworkManager
@@ -13,15 +10,15 @@ public class NetworkManager
     private Socket socket;
     private int remotePort = 0;
     private static final String remoteAddress = "localhost";
-    private DataOutputStream outputStream;
-    private BufferedReader inputStream;
+    private ObjectOutput objectOutput;
+    private ObjectInput objectInput;
 
     public void open()
     {
         try {
             this.socket = new Socket(remoteAddress, this.remotePort);
-            this.outputStream = new DataOutputStream(this.socket.getOutputStream());
-            this.inputStream = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            this.objectOutput = new ObjectOutputStream(this.socket.getOutputStream());
+            this.objectInput = new ObjectInputStream(this.socket.getInputStream());
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
@@ -38,13 +35,19 @@ public class NetworkManager
         return this.remotePort != 0;
     }
 
-    public boolean send(String request) throws RuntimeException
+
+    public CarDTO getRemoteDTO()
     {
-        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.outputStream) && Helper.isNotNull(this.inputStream))
+        return this.sendAndAwaitSerializedResponse("dto");
+    }
+
+    public boolean send(Object request) throws RuntimeException
+    {
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput))
         {
             try {
-                outputStream.writeBytes(request  + "\n");
-                outputStream.flush();
+                this.objectOutput.writeObject(request);
+                this.objectOutput.flush();
                 return true;
             }
             catch (IOException ex) {
@@ -52,27 +55,29 @@ public class NetworkManager
                 return false;
             }
         }
-
         throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
-    public boolean sendAndAwait(String request) throws RuntimeException
+    public boolean sendAndAwaitConfirmation(Object request, Object expectedResponse) throws RuntimeException
     {
-        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.outputStream) && Helper.isNotNull(this.inputStream))
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput))
         {
             try {
-                outputStream.writeBytes(request  + "\n");
-                outputStream.flush();
+                this.objectOutput.writeObject(request);
+                this.objectOutput.flush();
 
-                String response;
-                while ((response = inputStream.readLine()) != null) {
-                    if (response.contains("available")) {
+                Object response;
+                while ((response = this.objectInput.readObject()) != null) {
+                    if (response.equals(expectedResponse)) {
                        return true;
                     }
                     else {
                         return false;
                     }
                 }
+            }
+            catch (ClassNotFoundException ex) {
+                ErrorLogger.toConsole(ex);
             }
             catch (IOException ex) {
                 ErrorLogger.toConsole(ex);
@@ -82,45 +87,39 @@ public class NetworkManager
         throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
-//    public void listen()
-//    {
-//        try {
-//            String response;
-//            while ((response = inputStream.readLine()) != null) {
-//                if (response.contains(":exit")) {
-//                    // Close window and connection
-//                    this.close();
-//                    return;
-//                }
-//
-//                if (Helper.isInteger(response)) {
-//                    // call to set car speed
-//                }
-//
-//                if (response.contains(":position:")) {
-//                    // call to set car direction
-//                }
-//
-//                if (response.contains(":orientation:")) {
-//                    // call to set car direction
-//                }
-//            }
-//        }
-//        catch (IOException ex) {
-//            ErrorLogger.toConsole(ex);
-//        }
-//    }
-//
-//    public void close()
-//    {
-//        try {
-//            this.outputStream.close();
-//            this.inputStream.close();
-//            this.socket.close();
-//        }
-//        catch (IOException ex) {
-//            ErrorLogger.toConsole(ex);
-//        }
-//
-//    }
+    public CarDTO sendAndAwaitSerializedResponse(Object request) throws RuntimeException
+    {
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput))
+        {
+            try {
+                this.objectOutput.writeObject(request);
+                this.objectOutput.flush();
+
+                CarDTO response;
+                while ((response = (CarDTO)this.objectInput.readObject()) != null) {
+                    return response;
+                }
+            }
+            catch (ClassNotFoundException ex) {
+                ErrorLogger.toConsole(ex);
+            }
+            catch (IOException ex) {
+                ErrorLogger.toConsole(ex);
+            }
+        }
+        throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
+    }
+
+    public void close()
+    {
+        try {
+            this.objectOutput.close();
+            this.objectInput.close();
+            this.socket.close();
+        }
+        catch (IOException ex) {
+            ErrorLogger.toConsole(ex);
+        }
+
+    }
 }

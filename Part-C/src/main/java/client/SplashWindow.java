@@ -73,11 +73,15 @@ public class SplashWindow implements ActionListener
         if (e.getSource().equals(selectRedCarBtn)) {
             this.selectedColour = "red";
             this.remoteConnection.setRemotePort(2000);
+            JOptionPane.showMessageDialog(null, "You Control: Red",
+                    "Selection Made!", JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (e.getSource().equals(selectGreenCarBtn)) {
             this.selectedColour = "green";
             remoteConnection.setRemotePort(2001);
+            JOptionPane.showMessageDialog(null, "You control: Green",
+                    "Selection Made!", JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (e.getSource().equals(this.startGameButton)) {
@@ -95,14 +99,21 @@ public class SplashWindow implements ActionListener
     {
         try {
             this.remoteConnection.open();
-            boolean isAvailable = this.remoteConnection.sendAndAwait(":ahoy");
-            // Send another message to server to identify which car this client controls
+            boolean isAvailable = this.remoteConnection.sendAndAwaitConfirmation("ahoy", "available");
 
             if (isAvailable) {
-                TrackWindow track = new TrackWindow(this.remoteConnection, this.selectedColour);
-                track.buildWindow();
+                boolean isOtherClientReady = this.remoteConnection.sendAndAwaitConfirmation("ready", "start");
 
-                this.splash.close();
+                if (isOtherClientReady) {
+                    TrackWindow track = new TrackWindow(this.remoteConnection, this.selectedColour);
+                    track.buildWindow();
+
+                    this.splash.close();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Can not start game until both clients have selected a Car and are ready!",
+                            "Oops!", JOptionPane.WARNING_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "ERROR: Server Unreachable!",
                         "Error!", JOptionPane.ERROR_MESSAGE);

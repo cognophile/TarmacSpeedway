@@ -1,20 +1,21 @@
 package main.java.server;
 
 import main.java.utilities.ErrorLogger;
+import main.java.utilities.CarDTO;
 
 import java.net.Socket;
 import java.net.ServerSocket;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import java.io.*;
 
 public class ServerReceiver implements Runnable
 {
     private ServerSocket localServer;
     private Socket senderClientConnection;
-    private BufferedReader senderInputStream;
-    private DataOutputStream senderOutputStream;
+
+    private CarDTO remoteCar;
+    private ObjectInput senderObjectInput;
+    private ObjectOutput senderObjectOutput;
+
     private int localPort;
 
     public ServerReceiver(int localPort)
@@ -26,10 +27,14 @@ public class ServerReceiver implements Runnable
     public void run()
     {
         this.createSocket();
-        this.establishConnection();
-
+        this.establishConnections();
         this.handleRequests();
         this.close();
+    }
+
+    public void setState(CarDTO remoteCar)
+    {
+        this.remoteCar = remoteCar;
     }
 
     private void createSocket()
@@ -42,13 +47,13 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private void establishConnection()
+    private void establishConnections()
     {
         try {
             this.senderClientConnection = this.localServer.accept();
 
-            this.senderInputStream = new BufferedReader(new InputStreamReader(this.senderClientConnection.getInputStream()));
-            this.senderOutputStream = new DataOutputStream(this.senderClientConnection.getOutputStream());
+            this.senderObjectInput = new ObjectInputStream(this.senderClientConnection.getInputStream());
+            this.senderObjectOutput = new ObjectOutputStream(this.senderClientConnection.getOutputStream());
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
@@ -58,50 +63,64 @@ public class ServerReceiver implements Runnable
     private void handleRequests()
     {
         try {
-            String receivedMessage;
-            while((receivedMessage = this.senderInputStream.readLine()) != null)
-            {
-                if (receivedMessage.contains("ahoy")) {
-                    this.respond(":available");
-                    continue;
-                }
+            Object received;
+            while ((received = this.senderObjectInput.readObject()) != null) {
+                if (received instanceof String) {
+                    if (received.equals("ahoy")) {
+                        this.respond("available");
+                        continue;
+                    }
 
-                if (receivedMessage.contains("ready")) {
-                    // Mark this client as ready to play.
-                    // How to communicate other client ready?
-                    continue;
-                }
+                    if (received.equals("ready")) {
+                        // Check if other threads client is ready
+                        this.respond("start");
+                        continue;
+                    }
 
-                if (receivedMessage.contains("exit")) {
-                    this.forward(":exit");
-                    return;
-                }
+                    if (received.equals("dto")) {
+                        this.respond(this.remoteCar);
+                        continue;
+                    }
 
-                this.forward(receivedMessage);
+                    if (received.equals("exit")) {
+                        this.forwardState("exit");
+                        return;
+                    }
+                }
+                else {
+                    this.setState((CarDTO)received);
+                    // this.forward((CarDTO)received);
+                }
             }
+        }
+        catch (ClassNotFoundException ex) {
+            ErrorLogger.toConsole(ex);
         }
         catch (IOException ex) {
             ErrorLogger.toConsole(ex);
         }
     }
 
-    private void respond(String outboundMessage)
+    private void respond(Object T)
     {
         try {
-            this.senderOutputStream.writeBytes(outboundMessage + "\n");
-            this.senderOutputStream.flush();
+            this.senderObjectOutput.writeObject(T);
+            this.senderObjectOutput.flush();
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
         }
     }
 
-    private void forward(String outboundMessage)
+    private void forwardState(Object T)
     {
         try {
             // Forward message to other client thread
-            this.senderOutputStream.writeBytes(outboundMessage + "\n");
-            this.senderOutputStream.flush();
+            // Has to set the remoteCar DTO in the other thread
+            // Should this obj have a inbound(position, turn, speed) method to set the remoteCar which is the called
+            // function in the thread-communication implementation? eg. t1.forwardState() -> TC -> t2.inbound()
+            // this.senderOutputStream.writeBytes(outboundMessage + "\n");
+            // this.senderOutputStream.flush();
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
@@ -111,8 +130,8 @@ public class ServerReceiver implements Runnable
     private void close()
     {
         try {
-            this.senderOutputStream.close();
-            this.senderInputStream.close();
+            this.senderObjectOutput.close();
+            this.senderObjectInput.close();
             this.senderClientConnection.close();
         }
         catch (Exception ex) {
