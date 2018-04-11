@@ -26,7 +26,10 @@ public class ServerReceiver implements Runnable
     public void run()
     {
         this.createSocket();
-        this.listen();
+        this.establishConnection();
+
+        this.handleRequests();
+        this.close();
     }
 
     private void createSocket()
@@ -39,51 +42,37 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private void listen()
+    private void establishConnection()
     {
         try {
             this.senderClientConnection = this.localServer.accept();
 
             this.senderInputStream = new BufferedReader(new InputStreamReader(this.senderClientConnection.getInputStream()));
             this.senderOutputStream = new DataOutputStream(this.senderClientConnection.getOutputStream());
-
-            this.processRequest();
-            this.close();
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
         }
     }
 
-    private void processRequest()
+    private void handleRequests()
     {
         try {
             String receivedMessage;
             while((receivedMessage = this.senderInputStream.readLine()) != null)
             {
-                if (receivedMessage.contains(":ahoy")) {
-                    this.reply(":available");
-                    // Log the client sender details and respond as available
-                    return;
+                if (receivedMessage.contains("ahoy")) {
+                    this.respond(":available");
+                    continue;
                 }
 
-                if (receivedMessage.contains(":red")) {
-                    // Log the client sender details in relation to the car it controls
-                    return;
-                }
-
-                if (receivedMessage.contains(":green")) {
-                    // Log the client sender details in relation to the car it controls
-                    return;
-                }
-
-                if (receivedMessage.contains(":ready")) {
+                if (receivedMessage.contains("ready")) {
                     // Mark this client as ready to play.
                     // How to communicate other client ready?
-                    return;
+                    continue;
                 }
 
-                if (receivedMessage.contains(":exit")) {
+                if (receivedMessage.contains("exit")) {
                     this.forward(":exit");
                     return;
                 }
@@ -96,7 +85,7 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private void reply(String outboundMessage)
+    private void respond(String outboundMessage)
     {
         try {
             this.senderOutputStream.writeBytes(outboundMessage + "\n");
