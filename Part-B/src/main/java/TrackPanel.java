@@ -1,8 +1,7 @@
 package main.java;
 
 import javax.swing.*;
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -78,9 +77,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         ImageIcon red = this.redCar.getImage(this.redCar.getImageFilenameByIndex(this.redCar.getImageOrientation()));
         red.paintIcon(this, g, this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y);
 
-        if (this.redCar.getTrackPosition().x <= LEFT_BARRIER || this.redCar.getTrackPosition().x >= RIGHT_BARRIER
-                || this.redCar.getTrackPosition().y <= TOP_BARRIER || this.redCar.getTrackPosition().y >= BOTTOM_BARRIER)
-        {
+        if (this.isCrashed(this.redCar) || this.hasCollided()) {
             this.redCar.stop();
         }
         else {
@@ -93,14 +90,35 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         ImageIcon green = this.greenCar.getImage(this.greenCar.getImageFilenameByIndex(this.greenCar.getImageOrientation()));
         green.paintIcon(this, g, this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y);
 
-        if (this.greenCar.getTrackPosition().x <= LEFT_BARRIER || this.greenCar.getTrackPosition().x >= RIGHT_BARRIER
-                || this.greenCar.getTrackPosition().y <= TOP_BARRIER || this.greenCar.getTrackPosition().y >= BOTTOM_BARRIER)
-        {
+        if (this.isCrashed(this.greenCar) || this.hasCollided()) {
             this.greenCar.stop();
         }
         else {
             this.greenCar.move();
         }
+    }
+
+    private boolean isCrashed(Car car)
+    {
+        if (car.getTrackPosition().x <= LEFT_BARRIER || car.getTrackPosition().x >= RIGHT_BARRIER ||
+                car.getTrackPosition().y <= TOP_BARRIER || car.getTrackPosition().y >= BOTTOM_BARRIER)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean hasCollided()
+    {
+        Rectangle firstCarRectangle = new Rectangle(this.redCar.getTrackPosition().x, this.redCar.getTrackPosition().y, 55, 35);
+        Rectangle secondCarRectangle  = new Rectangle(this.greenCar.getTrackPosition().x, this.greenCar.getTrackPosition().y, 55, 35);
+
+        if (firstCarRectangle.intersects(secondCarRectangle) || secondCarRectangle.intersects(firstCarRectangle)) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
