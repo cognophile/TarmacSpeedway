@@ -35,7 +35,6 @@ public class NetworkManager
         return this.remotePort != 0;
     }
 
-
     public CarDTO getRemoteDTO()
     {
         return this.sendAndAwaitSerializedResponse("dto");

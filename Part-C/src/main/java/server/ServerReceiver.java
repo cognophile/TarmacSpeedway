@@ -6,9 +6,11 @@ import main.java.utilities.CarDTO;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.io.*;
+import java.util.concurrent.BlockingQueue;
 
 public class ServerReceiver implements Runnable
 {
+    private final BlockingQueue<CarDTO> carTransitionBlockingQueue;
     private ServerSocket localServer;
     private Socket senderClientConnection;
 
@@ -18,9 +20,10 @@ public class ServerReceiver implements Runnable
 
     private int localPort;
 
-    public ServerReceiver(int localPort)
+    public ServerReceiver(int localPort, BlockingQueue<CarDTO> queue)
     {
         this.localPort = localPort;
+        this.carTransitionBlockingQueue = queue;
     }
 
     @Override
@@ -32,9 +35,13 @@ public class ServerReceiver implements Runnable
         this.close();
     }
 
-    public void setState(CarDTO remoteCar)
+    private synchronized void fetchState()
     {
-        this.remoteCar = remoteCar;
+        try {
+            this.remoteCar = this.carTransitionBlockingQueue.take();
+        } catch (InterruptedException ex) {
+            ErrorLogger.toConsole(ex);
+        }
     }
 
     private void createSocket()
@@ -78,18 +85,17 @@ public class ServerReceiver implements Runnable
                     }
 
                     if (received.equals("dto")) {
+                        this.fetchState();
                         this.respond(this.remoteCar);
                         continue;
                     }
 
                     if (received.equals("exit")) {
-                        this.forwardState("exit");
                         return;
                     }
                 }
                 else {
-                    this.setState((CarDTO)received);
-                    // this.forward((CarDTO)received);
+                    this.forwardState((CarDTO)received);
                 }
             }
         }
@@ -112,17 +118,12 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private void forwardState(Object T)
+    private synchronized void forwardState(CarDTO T)
     {
         try {
-            // Forward message to other client thread
-            // Has to set the remoteCar DTO in the other thread
-            // Should this obj have a inbound(position, turn, speed) method to set the remoteCar which is the called
-            // function in the thread-communication implementation? eg. t1.forwardState() -> TC -> t2.inbound()
-            // this.senderOutputStream.writeBytes(outboundMessage + "\n");
-            // this.senderOutputStream.flush();
+            this.carTransitionBlockingQueue.put(T);
         }
-        catch (Exception ex) {
+        catch (InterruptedException ex) {
             ErrorLogger.toConsole(ex);
         }
     }
