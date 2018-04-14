@@ -73,6 +73,7 @@ public class SplashWindow implements ActionListener
         if (e.getSource().equals(selectRedCarBtn)) {
             this.selectedColour = "red";
             this.remoteConnection.setRemotePort(2000);
+
             JOptionPane.showMessageDialog(null, "You Control: Red",
                     "Selection Made!", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -80,6 +81,7 @@ public class SplashWindow implements ActionListener
         if (e.getSource().equals(selectGreenCarBtn)) {
             this.selectedColour = "green";
             remoteConnection.setRemotePort(2001);
+
             JOptionPane.showMessageDialog(null, "You control: Green",
                     "Selection Made!", JOptionPane.INFORMATION_MESSAGE);
         }
