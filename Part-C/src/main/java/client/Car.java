@@ -211,6 +211,38 @@ abstract public class Car
         }
     }
 
+    public boolean isCrashed()
+    {
+        if (this.getTrackPosition().x <= TrackPanel.LEFT_BARRIER || this.getTrackPosition().x >= TrackPanel.RIGHT_BARRIER ||
+                this.getTrackPosition().y <= TrackPanel.TOP_BARRIER || this.getTrackPosition().y >= TrackPanel.BOTTOM_BARRIER)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean hasCollided(Car otherCar)
+    {
+        Rectangle firstCarRectangle = new Rectangle(
+                this.getTrackPosition().x,
+                this.getTrackPosition().y,
+                50, 30
+        );
+
+        Rectangle secondCarRectangle  = new Rectangle(
+                otherCar.getTrackPosition().x,
+                otherCar.getTrackPosition().y,
+                50, 30
+        );
+
+        if (firstCarRectangle.intersects(secondCarRectangle) || secondCarRectangle.intersects(firstCarRectangle)) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Set the direction of travel for this car object.
      * @param trajectory String The direction for the car image to move (up, down, left, right)
