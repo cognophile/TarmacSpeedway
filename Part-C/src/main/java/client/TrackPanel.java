@@ -115,7 +115,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
         String filename = this.remoteControlledCar.getImageFilenameByIndex(this.remoteControlledCar.getImageOrientation());
         ImageIcon remote = this.remoteControlledCar.getImage(filename);
-        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y - 40);
+        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y);
     }
 
     private boolean isCrashed(Car car)

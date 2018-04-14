@@ -2,28 +2,29 @@ package main.java.server;
 
 import main.java.utilities.ErrorLogger;
 import main.java.utilities.CarDTO;
+import main.java.utilities.Helper;
 
+import java.awt.*;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.io.*;
-import java.util.concurrent.BlockingQueue;
 
 public class ServerReceiver implements Runnable
 {
-    private final BlockingQueue<CarDTO> carTransitionBlockingQueue;
+    private int localPort;
+    private int threadId;
+    private CarDTO remoteCar;
+
     private ServerSocket localServer;
     private Socket senderClientConnection;
 
-    private CarDTO remoteCar;
     private ObjectInput senderObjectInput;
     private ObjectOutput senderObjectOutput;
 
-    private int localPort;
-
-    public ServerReceiver(int localPort, BlockingQueue<CarDTO> queue)
+    public ServerReceiver(int threadId, int localPort)
     {
+        this.threadId = threadId;
         this.localPort = localPort;
-        this.carTransitionBlockingQueue = queue;
     }
 
     @Override
@@ -34,16 +35,6 @@ public class ServerReceiver implements Runnable
         this.handleRequests();
         this.close();
     }
-
-    private synchronized void fetchState()
-    {
-        try {
-            this.remoteCar = this.carTransitionBlockingQueue.take();
-        } catch (InterruptedException ex) {
-            ErrorLogger.toConsole(ex);
-        }
-    }
-
     private void createSocket()
     {
         try {
@@ -79,13 +70,12 @@ public class ServerReceiver implements Runnable
                     }
 
                     if (received.equals("ready")) {
-                        // Check if other threads client is ready
                         this.respond("start");
                         continue;
                     }
 
-                    if (received.equals("dto")) {
-                        this.fetchState();
+                    if (received.equals("fetch")) {
+                        this.fetchStateTransformation();
                         this.respond(this.remoteCar);
                         continue;
                     }
@@ -95,7 +85,7 @@ public class ServerReceiver implements Runnable
                     }
                 }
                 else {
-                    this.forwardState((CarDTO)received);
+                    this.forwardStateTransformation((CarDTO)received);
                 }
             }
         }
@@ -118,14 +108,14 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private synchronized void forwardState(CarDTO T)
+    private synchronized void fetchStateTransformation()
     {
-        try {
-            this.carTransitionBlockingQueue.put(T);
-        }
-        catch (InterruptedException ex) {
-            ErrorLogger.toConsole(ex);
-        }
+        this.remoteCar = ServerTransactionQueue.dequeue(this.threadId);
+    }
+
+    private synchronized void forwardStateTransformation(CarDTO updatedState)
+    {
+        ServerTransactionQueue.enqueue(this.threadId, updatedState);
     }
 
     private void close()

@@ -37,7 +37,7 @@ public class NetworkManager
 
     public CarDTO getRemoteDTO()
     {
-        return this.sendAndAwaitSerializedResponse("dto");
+        return this.sendAndAwaitSerializedResponse("fetch");
     }
 
     public boolean send(Object request) throws RuntimeException
