@@ -7,20 +7,8 @@ import java.io.Serializable;
 
 public class CarDTO implements Serializable
 {
-    public Point position;
-    public String trajectory;
-    public int orientation;
-    public int speed;
-
-    public CarDTO()
-    {
-    }
-
-    public CarDTO(Point position, String trajectory, int orientation, int speed)
-    {
-        this.position = position;
-        this.trajectory = trajectory;
-        this.orientation = orientation;
-        this.speed = speed;
-    }
+    public Point position = new Point(0,0);
+    public String trajectory = "left";
+    public int orientation = 13;
+    public int speed = 0;
 }

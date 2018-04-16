@@ -29,4 +29,14 @@ public class ServerTransactionQueue
             return redCarTransforms.poll();
         }
     }
+
+    public static boolean isEitherQueueEmpty()
+    {
+        if (redCarTransforms.isEmpty() || greenCarTransforms.isEmpty()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

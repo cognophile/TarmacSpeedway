@@ -2,7 +2,6 @@ package main.java.server;
 
 import main.java.utilities.ErrorLogger;
 import main.java.utilities.CarDTO;
-import main.java.utilities.Helper;
 
 import java.awt.*;
 import java.net.Socket;
@@ -13,7 +12,7 @@ public class ServerReceiver implements Runnable
 {
     private int localPort;
     private int threadId;
-    private CarDTO remoteCar;
+    private CarDTO remoteCarState = new CarDTO();
 
     private ServerSocket localServer;
     private Socket senderClientConnection;
@@ -35,6 +34,7 @@ public class ServerReceiver implements Runnable
         this.handleRequests();
         this.close();
     }
+
     private void createSocket()
     {
         try {
@@ -76,7 +76,7 @@ public class ServerReceiver implements Runnable
 
                     if (received.equals("fetch")) {
                         this.fetchStateTransformation();
-                        this.respond(this.remoteCar);
+                        this.respond(this.remoteCarState);
                         continue;
                     }
 
@@ -110,7 +110,9 @@ public class ServerReceiver implements Runnable
 
     private synchronized void fetchStateTransformation()
     {
-        this.remoteCar = ServerTransactionQueue.dequeue(this.threadId);
+        if (!ServerTransactionQueue.isEitherQueueEmpty()) {
+            this.remoteCarState = ServerTransactionQueue.dequeue(this.threadId);
+        }
     }
 
     private synchronized void forwardStateTransformation(CarDTO updatedState)
