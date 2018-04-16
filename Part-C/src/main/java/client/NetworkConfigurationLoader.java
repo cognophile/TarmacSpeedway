@@ -30,7 +30,7 @@ public abstract class NetworkConfigurationLoader
             contents.append("::");
         }
 
-
+        fileReader.close();
         return contents.toString();
     }
 
