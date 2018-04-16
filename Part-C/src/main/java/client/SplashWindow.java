@@ -1,7 +1,5 @@
 package main.java.client;
 
-import main.java.utilities.ErrorLogger;
-
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JPanel;
