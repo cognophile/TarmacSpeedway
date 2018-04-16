@@ -3,7 +3,6 @@ package main.java.server;
 import main.java.utilities.ErrorLogger;
 import main.java.utilities.CarDTO;
 
-import java.awt.*;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.io.*;
@@ -110,14 +109,14 @@ public class ServerReceiver implements Runnable
 
     private synchronized void fetchStateTransformation()
     {
-        if (!ServerTransactionQueue.isEitherQueueEmpty()) {
-            this.remoteCarState = ServerTransactionQueue.dequeue(this.threadId);
+        if (!ServerThreadMediationQueues.isEitherQueueEmpty()) {
+            this.remoteCarState = ServerThreadMediationQueues.dequeue(this.threadId);
         }
     }
 
     private synchronized void forwardStateTransformation(CarDTO updatedState)
     {
-        ServerTransactionQueue.enqueue(this.threadId, updatedState);
+        ServerThreadMediationQueues.enqueue(this.threadId, updatedState);
     }
 
     private void close()

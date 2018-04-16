@@ -5,7 +5,7 @@ import main.java.utilities.CarDTO;
 import java.util.AbstractQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ServerTransactionQueue
+public class ServerThreadMediationQueues
 {
     private static AbstractQueue<CarDTO> redCarTransforms = new ConcurrentLinkedQueue<>();
     private static AbstractQueue<CarDTO> greenCarTransforms = new ConcurrentLinkedQueue<>();
