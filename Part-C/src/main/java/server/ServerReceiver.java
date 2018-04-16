@@ -25,8 +25,11 @@ public class ServerReceiver implements Runnable
         this.localPort = localPort;
     }
 
+    /**
+     * Called within Thread.start()
+     */
     @Override
-    public void run()
+    public final void run()
     {
         this.createSocket();
         this.establishConnections();

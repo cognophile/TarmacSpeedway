@@ -18,11 +18,18 @@ public class BaseWindow extends JFrame
         this.composeWindow();
     }
 
+    /**
+     * Create a BaseWindow object with a specified window title
+     * @param windowTitle
+     */
     public BaseWindow(String windowTitle)
     {
         this.composeWindow(windowTitle);
     }
 
+    /**
+     * Render the BaseWindow
+     */
     public void render()
     {
         this.loadComponents();
@@ -35,27 +42,34 @@ public class BaseWindow extends JFrame
         this.window.setVisible(true);
     }
 
-    public void setWindowSize(int width, int height)
+    /**
+     * Add a Component or derived object of Component to this BaseWindow
+     * @param component
+     */
+    public void addComponents(Component component)
     {
-        this.window.setSize(width, height);
+        if (component != null) {
+            this.components.add(component);
+        }
     }
 
+    /**
+     * Dispose of the BaseWindow
+     */
     public void close()
     {
         this.window.setVisible(false);
         this.window.dispose();
     }
 
-    private void composeWindow()
+    /**
+     * Set the size of the BaseWindow
+     * @param width
+     * @param height
+     */
+    public void setWindowSize(int width, int height)
     {
-        this.window = new JFrame();
-        this.contentPane = this.window.getContentPane();
-    }
-
-    private void composeWindow(String title)
-    {
-        this.window = new JFrame(title);
-        this.contentPane = this.window.getContentPane();
+        this.window.setSize(width, height);
     }
 
     @Override
@@ -70,11 +84,16 @@ public class BaseWindow extends JFrame
         return this.window.getHeight();
     }
 
-    public void addComponents(Component component)
+    private void composeWindow()
     {
-        if (component != null) {
-            this.components.add(component);
-        }
+        this.window = new JFrame();
+        this.contentPane = this.window.getContentPane();
+    }
+
+    private void composeWindow(String title)
+    {
+        this.window = new JFrame(title);
+        this.contentPane = this.window.getContentPane();
     }
 
     private void loadComponents()

@@ -1,11 +1,12 @@
 package main.java.client;
 
+import main.java.utilities.ErrorLogger;
+
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
-import java.awt.Dimension;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +17,7 @@ public class SplashWindow implements ActionListener
     private JButton selectRedCarBtn = new JButton("Red Car");
     private JButton selectGreenCarBtn = new JButton("Green Car");
     private JButton startGameButton = new JButton("Race");
-    private String selectedColour;
+    private Color selectedColour;
 
     public final void start()
     {
@@ -68,7 +69,7 @@ public class SplashWindow implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         if (e.getSource().equals(selectRedCarBtn)) {
-            this.selectedColour = "red";
+            this.selectedColour = Color.red;
             this.remoteConnection.setRemotePort(2000);
 
             JOptionPane.showMessageDialog(null, "You Control: Red",
@@ -76,7 +77,7 @@ public class SplashWindow implements ActionListener
         }
 
         if (e.getSource().equals(selectGreenCarBtn)) {
-            this.selectedColour = "green";
+            this.selectedColour = Color.green;
             remoteConnection.setRemotePort(2001);
 
             JOptionPane.showMessageDialog(null, "You control: Green",
@@ -96,27 +97,40 @@ public class SplashWindow implements ActionListener
 
     private void establishServerConnection()
     {
+        boolean isAvailable;
         this.remoteConnection.open();
-        boolean isAvailable = this.remoteConnection.sendAndAwaitConfirmation("ahoy", "available");
+
+        try {
+            isAvailable = this.remoteConnection.sendAndAwaitConfirmation("ahoy", "available");
+        }
+        catch (RuntimeException ex) {
+            ErrorLogger.toConsole(ex);
+            JOptionPane.showMessageDialog(null, "ERROR: Server Unreachable!",
+                    "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         if (isAvailable) {
             this.startGame();
-        } else {
-            JOptionPane.showMessageDialog(null, "ERROR: Server Unreachable!",
-                    "Error!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void startGame()
     {
-        boolean isOtherClientReady = this.remoteConnection.sendAndAwaitConfirmation("ready", "start");
+        boolean isOtherClientReady;
+
+        try {
+            isOtherClientReady = this.remoteConnection.sendAndAwaitConfirmation("ready", "start");
+        }
+        catch (RuntimeException ex) {
+            ErrorLogger.toConsole(ex);
+            JOptionPane.showMessageDialog(null, "Can't start game until both clients select a car and click 'Race!'",
+                    "Oops!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         if (isOtherClientReady) {
             this.loadGamePanel();
-        }
-        else {
-            JOptionPane.showMessageDialog(null, "Can't start game until both clients select a car and click 'Race!'",
-                    "Oops!", JOptionPane.WARNING_MESSAGE);
         }
     }
 

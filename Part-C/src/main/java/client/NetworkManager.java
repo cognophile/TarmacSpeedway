@@ -14,6 +14,9 @@ public class NetworkManager
     private ObjectOutput objectOutput;
     private ObjectInput objectInput;
 
+    /**
+     * Open the connection to the server
+     */
     public void open()
     {
         if (this.canLoadServerConfiguration()) {
@@ -28,21 +31,39 @@ public class NetworkManager
         }
     }
 
+    /**
+     * Set the remote port on which to conenct to the server
+     * @param port Integer server port to connect to
+     */
     public void setRemotePort(int port)
     {
         this.remotePort = port;
     }
 
+    /**
+     * Determine if the remote port to connect to is set
+     * @return
+     */
     public boolean isPortSet()
     {
         return this.remotePort != 0;
     }
 
+    /**
+     * Fetch the latest Remote Car information from the server
+     * @return CarDTO object corresponding to the other (remote) client
+     */
     public CarDTO getRemoteDTO()
     {
-        return this.sendAndAwaitSerializedResponse("fetch");
+        return (CarDTO)this.sendAndAwaitSerializedResponse("fetch");
     }
 
+    /**
+     * Send an object to the server
+     * @param request Any derivative of Object
+     * @return boolean Whether the send was successful or not
+     * @throws RuntimeException If the server is unavailable
+     */
     public boolean send(Object request) throws RuntimeException
     {
         if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput))
@@ -60,6 +81,13 @@ public class NetworkManager
         throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
+    /**
+     * Send an object to the server and assert whether the response is as expected
+     * @param request
+     * @param expectedResponse
+     * @return boolean Whether the response matches that expected or not
+     * @throws RuntimeException If the server is unavailable
+     */
     public boolean sendAndAwaitConfirmation(Object request, Object expectedResponse) throws RuntimeException
     {
         if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput))
@@ -90,7 +118,13 @@ public class NetworkManager
         throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
-    public CarDTO sendAndAwaitSerializedResponse(Object request) throws RuntimeException
+    /**
+     * Send an object to the server and await a serialized object in response
+     * @param request
+     * @return Object
+     * @throws RuntimeException If the server is unavailable
+     */
+    public Object sendAndAwaitSerializedResponse(Object request) throws RuntimeException
     {
         if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput))
         {
@@ -98,8 +132,8 @@ public class NetworkManager
                 this.objectOutput.writeObject(request);
                 this.objectOutput.flush();
 
-                CarDTO response;
-                while ((response = (CarDTO)this.objectInput.readObject()) != null) {
+                Object response;
+                while ((response = this.objectInput.readObject()) != null) {
                     return response;
                 }
             }
@@ -114,6 +148,9 @@ public class NetworkManager
         throw new RuntimeException("Request Send Failure: remote network is unavailable or unreachable!");
     }
 
+    /**
+     * Close the connection to the server
+     */
     public void close()
     {
         try {

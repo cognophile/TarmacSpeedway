@@ -21,14 +21,14 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     private NetworkManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
-    public TrackPanel(NetworkManager remoteConnection, String selectedColour)
+    public TrackPanel(NetworkManager remoteConnection, Color selectedColour)
     {
         this.addKeyListener(this);
         this.setFocusable(true);
 
         this.remoteConnection = remoteConnection;
 
-        if (selectedColour.equals("red")) {
+        if (selectedColour.equals(Color.red)) {
             this.locallyControlledCar = new RedCar();
             this.remoteControlledCar = new GreenCar();
         } else {
@@ -45,6 +45,34 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         if(e.getSource() == this.timer)
         {
             repaint();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_R)
+        {
+            this.locallyControlledCar.reset();
+            this.remoteControlledCar.reset();
+        }
+
+        switch(key)
+        {
+            case KeyEvent.VK_W:
+                this.locallyControlledCar.increaseSpeed();
+                break;
+            case KeyEvent.VK_S:
+                this.locallyControlledCar.decreaseSpeed();
+                break;
+            case KeyEvent.VK_A:
+                this.locallyControlledCar.turnLeft();
+                break;
+            case KeyEvent.VK_D:
+                this.locallyControlledCar.turnRight();
+                break;
         }
     }
 
@@ -116,34 +144,6 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         String filename = this.remoteControlledCar.getImageFilenameByIndex(this.remoteControlledCar.getImageOrientation());
         ImageIcon remote = this.remoteControlledCar.getImage(filename);
         remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e)
-    {
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_R)
-        {
-            this.locallyControlledCar.reset();
-            this.remoteControlledCar.reset();
-        }
-
-        switch(key)
-        {
-            case KeyEvent.VK_W:
-                this.locallyControlledCar.increaseSpeed();
-                break;
-            case KeyEvent.VK_S:
-                this.locallyControlledCar.decreaseSpeed();
-                break;
-            case KeyEvent.VK_A:
-                this.locallyControlledCar.turnLeft();
-                break;
-            case KeyEvent.VK_D:
-                this.locallyControlledCar.turnRight();
-                break;
-        }
     }
 
     @Override

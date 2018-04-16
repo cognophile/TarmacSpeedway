@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 public abstract class ErrorLogger
 {
+    /**
+     * Log the exception  type, message, and stack trace to the console
+     * @param ex The exception object
+     */
     public static void toConsole(Exception ex)
     {
         StringBuilder stackTrace = new StringBuilder();

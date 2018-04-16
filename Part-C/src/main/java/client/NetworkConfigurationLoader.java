@@ -7,6 +7,12 @@ import java.io.IOException;
 
 public abstract class NetworkConfigurationLoader
 {
+    /**
+     * Fetch the IP location of the Server to communicate with, found resources/remoteConfiguration.txt
+     * @return String containing remote server IP
+     * @throws IOException Cannot parse the contents of the file
+     * @throws FileNotFoundException Cannot find or identify the file
+     */
     public static String getRemoteAddress() throws IOException, FileNotFoundException
     {
         String fileContents = NetworkConfigurationLoader.readFileContents();

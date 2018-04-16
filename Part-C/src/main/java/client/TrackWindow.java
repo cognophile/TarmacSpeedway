@@ -1,18 +1,22 @@
 package main.java.client;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class TrackWindow
 {
     private BaseWindow trackWindow;
     private TrackPanel track;
 
-    public TrackWindow(NetworkManager remoteConnection, String selectedColour)
+    public TrackWindow(NetworkManager remoteConnection, Color selectedColour)
     {
         this.trackWindow = new BaseWindow("TarmacSpeedway: Track");
         this.track = new TrackPanel(remoteConnection, selectedColour);
     }
 
+    /**
+     * Build the Window with pre-defined window sizes, layout and components
+     */
     public void buildWindow()
     {
         this.trackWindow.setWindowSize(860, 735);
