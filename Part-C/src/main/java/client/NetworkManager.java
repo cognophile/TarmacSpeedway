@@ -2,6 +2,7 @@ package main.java.client;
 
 import main.java.utilities.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -9,19 +10,21 @@ public class NetworkManager
 {
     private Socket socket;
     private int remotePort = 0;
-    private static final String remoteAddress = "localhost";
+    private String remoteAddress;
     private ObjectOutput objectOutput;
     private ObjectInput objectInput;
 
     public void open()
     {
-        try {
-            this.socket = new Socket(remoteAddress, this.remotePort);
-            this.objectOutput = new ObjectOutputStream(this.socket.getOutputStream());
-            this.objectInput = new ObjectInputStream(this.socket.getInputStream());
-        }
-        catch (Exception ex) {
-            ErrorLogger.toConsole(ex);
+        if (this.canLoadServerConfiguration()) {
+            try {
+                this.socket = new Socket(this.remoteAddress, this.remotePort);
+                this.objectOutput = new ObjectOutputStream(this.socket.getOutputStream());
+                this.objectInput = new ObjectInputStream(this.socket.getInputStream());
+            }
+            catch (Exception ex) {
+                ErrorLogger.toConsole(ex);
+            }
         }
     }
 
@@ -77,6 +80,7 @@ public class NetworkManager
             }
             catch (ClassNotFoundException ex) {
                 ErrorLogger.toConsole(ex);
+                return false;
             }
             catch (IOException ex) {
                 ErrorLogger.toConsole(ex);
@@ -101,6 +105,7 @@ public class NetworkManager
             }
             catch (ClassNotFoundException ex) {
                 ErrorLogger.toConsole(ex);
+
             }
             catch (IOException ex) {
                 ErrorLogger.toConsole(ex);
@@ -120,5 +125,26 @@ public class NetworkManager
             ErrorLogger.toConsole(ex);
         }
 
+    }
+
+    private boolean canLoadServerConfiguration()
+    {
+        try {
+            this.remoteAddress = NetworkConfigurationLoader.getRemoteAddress();
+            return true;
+        }
+        catch (FileNotFoundException ex) {
+            ErrorLogger.toConsole(ex);
+            JOptionPane.showMessageDialog(null, "Cannot locate required file: " +
+                            "\nPlease make sure '../resources/remoteConfiguration.txt' exists!",
+                    "Oops!", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        catch (IOException ex) {
+            ErrorLogger.toConsole(ex);
+            JOptionPane.showMessageDialog(null, "Unable to parse network configuration file!",
+                    "Oops!", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 }
