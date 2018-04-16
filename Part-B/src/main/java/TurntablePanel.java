@@ -7,21 +7,15 @@ import java.awt.event.ActionListener;
 
 public class TurntablePanel extends JPanel implements ActionListener
 {
-    private int imageIndex = 0;
-    private int animationSpeed;
+    private int imageIndex = 1;
 
-    private Timer timer = new Timer(animationSpeed, this);
+    private Timer timer = new Timer(125, this);
     private Car redCar;
 
     public TurntablePanel()
     {
         this.redCar = new RedCar();
         this.timer.start();
-    }
-
-    public void setAnimationSpeed(int animationSpeed)
-    {
-        this.animationSpeed = animationSpeed;
     }
 
     @Override
@@ -39,24 +33,10 @@ public class TurntablePanel extends JPanel implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getSource() == this.timer)
-        {
-            if (this.imageIndex >= 16)
-            {
+        if (e.getSource() == this.timer) {
+
+            if (this.imageIndex >= 16) {
                 this.imageIndex = 0;
-            }
-
-            try {
-                Thread.sleep(125);
-            }
-            catch (InterruptedException ex) {
-                // Inform the user an error occurred.
-                JOptionPane.showMessageDialog(null, "ERROR: Process interrupted. Please restart.\n" + ex.getMessage(), "Error!",
-                        JOptionPane.ERROR_MESSAGE);
-
-                // Simulate logging the error
-                System.out.println(ex.getMessage());
-                System.exit(1);
             }
 
             repaint();

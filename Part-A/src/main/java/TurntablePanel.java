@@ -8,10 +8,9 @@ import java.util.Map;
 
 public class TurntablePanel extends JPanel implements ActionListener
 {
-    private int imageIndex = 0;
-    private int animationSpeed;
+    private int imageIndex = 1;
     private Map<String, ImageIcon> redCar;
-    private Timer timer = new Timer(animationSpeed, this);
+    private Timer timer = new Timer(125, this);
     private String filePrefix = "red_small_";
 
     public TurntablePanel()
@@ -38,17 +37,12 @@ public class TurntablePanel extends JPanel implements ActionListener
         }
     }
 
-    public void setAnimationSpeed(int animationSpeed)
-    {
-        this.animationSpeed = animationSpeed;
-    }
-
     @Override
     protected void paintComponent(Graphics graphic)
     {
         super.paintComponent(graphic);
 
-        String imageName = new String(filePrefix + imageIndex + ".png");
+        String imageName = this.filePrefix + this.imageIndex + ".png";
         ImageIcon current = redCar.get(imageName);
 
         current.paintIcon(this, graphic, 212, 212);
@@ -56,30 +50,16 @@ public class TurntablePanel extends JPanel implements ActionListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == this.timer) {
 
-        if(e.getSource() == this.timer)
-        {
-            if (imageIndex >= 16)
-            {
-                imageIndex = 0;
-            }
-
-            try {
-                Thread.sleep(125);
-            }
-            catch (InterruptedException ex) {
-                // Inform the user an error occurred.
-                JOptionPane.showMessageDialog(null, "ERROR: Process interrupted. Please restart.\n" + ex.getMessage(), "Error!",
-                        JOptionPane.ERROR_MESSAGE);
-
-                // Simulate logging the error
-                System.out.println(ex.getMessage());
-                System.exit(1);
+            if (this.imageIndex >= 16) {
+                this.imageIndex = 0;
             }
 
             repaint();
-            imageIndex++;
+            this.imageIndex++;
         }
     }
 }
