@@ -99,29 +99,35 @@ public class SplashWindow implements ActionListener
 
     private void establishServerConnection()
     {
-        try {
-            this.remoteConnection.open();
-            boolean isAvailable = this.remoteConnection.sendAndAwaitConfirmation("ahoy", "available");
+        this.remoteConnection.open();
+        boolean isAvailable = this.remoteConnection.sendAndAwaitConfirmation("ahoy", "available");
 
-            if (isAvailable) {
-                boolean isOtherClientReady = this.remoteConnection.sendAndAwaitConfirmation("ready", "start");
-
-                if (isOtherClientReady) {
-                    TrackWindow track = new TrackWindow(this.remoteConnection, this.selectedColour);
-                    track.buildWindow();
-
-                    this.splash.close();
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Can not start game until both clients have selected a Car and are ready!",
-                            "Oops!", JOptionPane.WARNING_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "ERROR: Server Unreachable!",
-                        "Error!", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            ErrorLogger.toConsole(ex);
+        if (isAvailable) {
+            this.startGame();
+        } else {
+            JOptionPane.showMessageDialog(null, "ERROR: Server Unreachable!",
+                    "Error!", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void startGame()
+    {
+        boolean isOtherClientReady = this.remoteConnection.sendAndAwaitConfirmation("ready", "start");
+
+        if (isOtherClientReady) {
+            this.loadGamePanel();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Can't start game until both clients select a car and click 'Race!'",
+                    "Oops!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void loadGamePanel()
+    {
+        TrackWindow track = new TrackWindow(this.remoteConnection, this.selectedColour);
+        track.buildWindow();
+
+        this.splash.close();
     }
 }
