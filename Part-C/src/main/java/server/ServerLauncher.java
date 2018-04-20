@@ -7,8 +7,8 @@ public class ServerLauncher
     public static void main(String args[])
     {
         try {
-            Thread clientConnectionOne = new Thread(new ServerReceiver(1, 2000));
-            Thread clientConnectionTwo = new Thread(new ServerReceiver(2, 2001));
+            Thread clientConnectionOne = new Thread(new ServerReceiver(1, 2302));
+            Thread clientConnectionTwo = new Thread(new ServerReceiver(2, 2303));
 
             clientConnectionOne.start();
             clientConnectionTwo.start();

@@ -16,8 +16,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     public static final int LEFT_BARRIER = 0;
     public static final int RIGHT_BARRIER= 760;
 
-    private Car locallyControlledCar;
-    private Car remoteControlledCar;
+    private Car localCar;
+    private Car remoteCar;
     private NetworkManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
@@ -29,11 +29,11 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         this.remoteConnection = remoteConnection;
 
         if (selectedColour.equals(Color.red)) {
-            this.locallyControlledCar = new RedCar();
-            this.remoteControlledCar = new GreenCar();
+            this.localCar = new RedCar();
+            this.remoteCar = new GreenCar();
         } else {
-            this.locallyControlledCar = new GreenCar();
-            this.remoteControlledCar = new RedCar();
+            this.localCar = new GreenCar();
+            this.remoteCar = new RedCar();
         }
 
         this.timer.start();
@@ -55,23 +55,23 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
         if (key == KeyEvent.VK_R)
         {
-            this.locallyControlledCar.reset();
-            this.remoteControlledCar.reset();
+            this.localCar.reset();
+            this.remoteCar.reset();
         }
 
         switch(key)
         {
             case KeyEvent.VK_W:
-                this.locallyControlledCar.increaseSpeed();
+                this.localCar.increaseSpeed();
                 break;
             case KeyEvent.VK_S:
-                this.locallyControlledCar.decreaseSpeed();
+                this.localCar.decreaseSpeed();
                 break;
             case KeyEvent.VK_A:
-                this.locallyControlledCar.turnLeft();
+                this.localCar.turnLeft();
                 break;
             case KeyEvent.VK_D:
-                this.locallyControlledCar.turnRight();
+                this.localCar.turnRight();
                 break;
         }
     }
@@ -110,40 +110,36 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         this.drawRemoteCar(g);
     }
 
-    private void drawLocalCar(Graphics g)
-    {
-        String filename = this.locallyControlledCar.getImageFilenameByIndex(this.locallyControlledCar.getImageOrientation());
-        ImageIcon controlled = this.locallyControlledCar.getImage(filename);
-        controlled.paintIcon(this, g, this.locallyControlledCar.getTrackPosition().x, this.locallyControlledCar.getTrackPosition().y);
+    private void drawLocalCar(Graphics g) {
+        String filename = this.localCar.getImageFilenameByIndex(this.localCar.getImageOrientation());
+        ImageIcon controlled = this.localCar.getImage(filename);
+        controlled.paintIcon(this, g, this.localCar.getTrackPosition().x, this.localCar.getTrackPosition().y);
 
         CarDTO localCarDTO = new CarDTO();
-        localCarDTO.speed = this.locallyControlledCar.getSpeed();
-
-        if (this.locallyControlledCar.isCrashed() || this.locallyControlledCar.hasCollided(this.remoteControlledCar))
-        {
-            this.locallyControlledCar.stop();
-            localCarDTO.speed = this.locallyControlledCar.getSpeed();
-        }
-        else {
-            this.locallyControlledCar.move();
+        if (this.localCar.isCrashed() || this.localCar.hasCollided(this.remoteCar)) {
+            this.localCar.stop();
+        } else {
+            this.localCar.move();
         }
 
-        localCarDTO.position = this.locallyControlledCar.getTrackPosition();
-        localCarDTO.trajectory = this.locallyControlledCar.getTrajectory();
-        localCarDTO.orientation = this.locallyControlledCar.getImageOrientation();
+        localCarDTO.speed = this.localCar.getSpeed();
+        localCarDTO.position = this.localCar.getTrackPosition();
+        localCarDTO.trajectory = this.localCar.getTrajectory();
+        localCarDTO.orientation = this.localCar.getImageOrientation();
         this.remoteConnection.send(localCarDTO);
     }
+
 
     private void drawRemoteCar(Graphics g)
     {
         CarDTO remoteCarDTO = this.remoteConnection.getRemoteDTO();
-        this.remoteControlledCar.setTrackPosition(remoteCarDTO.position.x, remoteCarDTO.position.y);
-        this.remoteControlledCar.setSpeed(remoteCarDTO.speed);
-        this.remoteControlledCar.setImageOrientation(remoteCarDTO.orientation);
+        this.remoteCar.setTrackPosition(remoteCarDTO.position.x, remoteCarDTO.position.y);
+        this.remoteCar.setSpeed(remoteCarDTO.speed);
+        this.remoteCar.setImageOrientation(remoteCarDTO.orientation);
 
-        String filename = this.remoteControlledCar.getImageFilenameByIndex(this.remoteControlledCar.getImageOrientation());
-        ImageIcon remote = this.remoteControlledCar.getImage(filename);
-        remote.paintIcon(this, g, this.remoteControlledCar.getTrackPosition().x, this.remoteControlledCar.getTrackPosition().y);
+        String filename = this.remoteCar.getImageFilenameByIndex(this.remoteCar.getImageOrientation());
+        ImageIcon remote = this.remoteCar.getImage(filename);
+        remote.paintIcon(this, g, this.remoteCar.getTrackPosition().x, this.remoteCar.getTrackPosition().y);
     }
 
     @Override

@@ -5,7 +5,7 @@ import main.java.utilities.CarDTO;
 import java.util.AbstractQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ServerThreadMediationQueues
+public class ThreadCommunicationQueue
 {
     private static AbstractQueue<CarDTO> redCarTransforms = new ConcurrentLinkedQueue<>();
     private static AbstractQueue<CarDTO> greenCarTransforms = new ConcurrentLinkedQueue<>();
@@ -15,7 +15,7 @@ public class ServerThreadMediationQueues
      * @param threadNumber
      * @param carTransaction
      */
-    public static void enqueue(int threadNumber, CarDTO carTransaction)
+    public synchronized static void enqueue(int threadNumber, CarDTO carTransaction)
     {
         if (threadNumber == 1) {
             redCarTransforms.add(carTransaction);
@@ -30,7 +30,7 @@ public class ServerThreadMediationQueues
      * @param threadNumber
      * @return CarDTO Most recent Car transformation update
      */
-    public static CarDTO dequeue(int threadNumber)
+    public synchronized static CarDTO dequeue(int threadNumber)
     {
         if (threadNumber == 1) {
             return greenCarTransforms.poll();
@@ -44,7 +44,7 @@ public class ServerThreadMediationQueues
      * Determine whether either shared DTO queue is empty
      * @return
      */
-    public static boolean isEitherQueueEmpty()
+    public synchronized static boolean isEitherQueueEmpty()
     {
         if (redCarTransforms.isEmpty() || greenCarTransforms.isEmpty()) {
             return true;

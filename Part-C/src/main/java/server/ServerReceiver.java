@@ -112,14 +112,14 @@ public class ServerReceiver implements Runnable
 
     private synchronized void fetchStateTransformation()
     {
-        if (!ServerThreadMediationQueues.isEitherQueueEmpty()) {
-            this.remoteCarState = ServerThreadMediationQueues.dequeue(this.threadId);
+        if (!ThreadCommunicationQueue.isEitherQueueEmpty()) {
+            this.remoteCarState = ThreadCommunicationQueue.dequeue(this.threadId);
         }
     }
 
     private synchronized void forwardStateTransformation(CarDTO updatedState)
     {
-        ServerThreadMediationQueues.enqueue(this.threadId, updatedState);
+        ThreadCommunicationQueue.enqueue(this.threadId, updatedState);
     }
 
     private void close()
