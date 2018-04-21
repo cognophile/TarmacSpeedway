@@ -53,9 +53,9 @@ public class NetworkManager
      * Fetch the latest Remote Car information from the server
      * @return CarDTO object corresponding to the other (remote) client
      */
-    public CarDTO getRemoteDTO()
+    public Object getRemoteState()
     {
-        return (CarDTO)this.sendAndAwaitSerializedResponse("fetch");
+        return this.sendAndAwaitSerializedResponse("fetch");
     }
 
     /**
@@ -139,7 +139,6 @@ public class NetworkManager
             }
             catch (ClassNotFoundException ex) {
                 ErrorLogger.toConsole(ex);
-
             }
             catch (IOException ex) {
                 ErrorLogger.toConsole(ex);

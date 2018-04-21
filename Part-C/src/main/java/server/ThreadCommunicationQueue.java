@@ -1,27 +1,25 @@
 package main.java.server;
 
-import main.java.utilities.CarDTO;
-
 import java.util.AbstractQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ThreadCommunicationQueue
 {
-    private static AbstractQueue<CarDTO> redCarTransforms = new ConcurrentLinkedQueue<>();
-    private static AbstractQueue<CarDTO> greenCarTransforms = new ConcurrentLinkedQueue<>();
+    private static AbstractQueue<Object> redCarMessages = new ConcurrentLinkedQueue<>();
+    private static AbstractQueue<Object> greenCarMessages = new ConcurrentLinkedQueue<>();
 
     /**
      * Add a Car data transmission update object to the shared server queue
      * @param threadNumber
      * @param carTransaction
      */
-    public synchronized static void enqueue(int threadNumber, CarDTO carTransaction)
+    public synchronized static void enqueue(int threadNumber, Object carTransaction)
     {
         if (threadNumber == 1) {
-            redCarTransforms.add(carTransaction);
+            redCarMessages.add(carTransaction);
         }
         else {
-            greenCarTransforms.add(carTransaction);
+            greenCarMessages.add(carTransaction);
         }
     }
 
@@ -30,13 +28,13 @@ public class ThreadCommunicationQueue
      * @param threadNumber
      * @return CarDTO Most recent Car transformation update
      */
-    public synchronized static CarDTO dequeue(int threadNumber)
+    public synchronized static Object dequeue(int threadNumber)
     {
         if (threadNumber == 1) {
-            return greenCarTransforms.poll();
+            return greenCarMessages.poll();
         }
         else {
-            return redCarTransforms.poll();
+            return redCarMessages.poll();
         }
     }
 
@@ -46,7 +44,7 @@ public class ThreadCommunicationQueue
      */
     public synchronized static boolean isEitherQueueEmpty()
     {
-        if (redCarTransforms.isEmpty() || greenCarTransforms.isEmpty()) {
+        if (redCarMessages.isEmpty() || greenCarMessages.isEmpty()) {
             return true;
         }
         else {

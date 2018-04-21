@@ -4,10 +4,7 @@ import main.java.utilities.CarDTO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 public class TrackPanel extends JPanel implements ActionListener, KeyListener
 {
@@ -53,10 +50,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     {
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_R)
-        {
-            this.localCar.reset();
-            this.remoteCar.reset();
+        if (key == KeyEvent.VK_R) {
+
         }
 
         switch(key)
@@ -73,6 +68,14 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
             case KeyEvent.VK_D:
                 this.localCar.turnRight();
                 break;
+            case KeyEvent.VK_R:
+                this.remoteConnection.send("reset");
+                this.localCar.reset();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                this.remoteConnection.send("exit");
+                this.remoteConnection.close();
+                this.closeClient();
         }
     }
 
@@ -132,14 +135,30 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private void drawRemoteCar(Graphics g)
     {
-        CarDTO remoteCarDTO = this.remoteConnection.getRemoteDTO();
-        this.remoteCar.setTrackPosition(remoteCarDTO.position.x, remoteCarDTO.position.y);
-        this.remoteCar.setSpeed(remoteCarDTO.speed);
-        this.remoteCar.setImageOrientation(remoteCarDTO.orientation);
+        Object updateMessage = this.remoteConnection.getRemoteState();
+
+        if (updateMessage instanceof String && updateMessage.equals("reset")) {
+            this.remoteCar.reset();
+        }
+        else if (updateMessage instanceof String && updateMessage.equals("exit")) {
+            this.closeClient();
+        }
+        else {
+            CarDTO retrievedState = (CarDTO)updateMessage;
+            this.remoteCar.setTrackPosition(retrievedState.position.x, retrievedState.position.y);
+            this.remoteCar.setSpeed(retrievedState.speed);
+            this.remoteCar.setImageOrientation(retrievedState.orientation);
+        }
 
         String filename = this.remoteCar.getImageFilenameByIndex(this.remoteCar.getImageOrientation());
         ImageIcon remote = this.remoteCar.getImage(filename);
         remote.paintIcon(this, g, this.remoteCar.getTrackPosition().x, this.remoteCar.getTrackPosition().y);
+    }
+
+    private void closeClient()
+    {
+        JFrame client = (JFrame) SwingUtilities.windowForComponent(this);
+        client.dispatchEvent(new WindowEvent(client, WindowEvent.WINDOW_CLOSING));
     }
 
     @Override
