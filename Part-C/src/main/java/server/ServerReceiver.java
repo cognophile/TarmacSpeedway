@@ -86,6 +86,7 @@ public class ServerReceiver implements Runnable
                     }
 
                     if (received.equals("exit")) {
+                        this.forwardUpdateMessage(received);
                         return;
                     }
                 }

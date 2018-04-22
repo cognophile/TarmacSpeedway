@@ -28,7 +28,8 @@ public class TrackWindow
         JOptionPane.showMessageDialog(null,
                 "Engines are running! Lights are green! " +
                         "\n\nControls: \n  W (Accelerate), A (Turn Left), S (Decelerate), D (Turn Right)" +
-                        "\n\nIf you crash, hit 'R' to restart!",
+                        "\n\nIf either player crashes, press 'R' to restart!" +
+                        "\n\nTo end the game, press 'ESC' to exit!",
                 "Lights out!", JOptionPane.PLAIN_MESSAGE);
     }
 }
