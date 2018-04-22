@@ -44,7 +44,13 @@ _'Sources'_ tab on the right.
 
 - Each client must select a Car colour. 
 
-- Click to start the race
+- Click to start the race.
 
-- Use W, A, S, D to maneuver your car. 
+## Controls
+
+- For Part B and C, use `W`, `A`, `S`, `D` to maneuver your car. Use `R`to reset cars to the start line. 
+
+- For Part C, use `ESC` to close both client connections. 
+
+
 
