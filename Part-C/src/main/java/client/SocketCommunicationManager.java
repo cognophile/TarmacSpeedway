@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
-public class NetworkManager
+public class SocketCommunicationManager
 {
     private Socket socket;
     private int remotePort = 0;

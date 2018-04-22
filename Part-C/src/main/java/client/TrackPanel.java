@@ -15,10 +15,15 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private Car localCar;
     private Car remoteCar;
-    private NetworkManager remoteConnection;
+    private SocketCommunicationManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
-    public TrackPanel(NetworkManager remoteConnection, Color selectedColour)
+    /**
+     * Create a TrackPanel instance to render track and create Cars
+     * @param remoteConnection
+     * @param selectedColour
+     */
+    public TrackPanel(SocketCommunicationManager remoteConnection, Color selectedColour)
     {
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -39,8 +44,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == this.timer)
-        {
+        if(e.getSource() == this.timer) {
             repaint();
         }
     }
@@ -48,14 +52,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_R) {
-
-        }
-
-        switch(key)
-        {
+        switch(e.getKeyCode()) {
             case KeyEvent.VK_W:
                 this.localCar.increaseSpeed();
                 break;
@@ -135,19 +132,23 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private void drawRemoteCar(Graphics g)
     {
-        Object updateMessage = this.remoteConnection.getRemoteState();
+        Object response = this.remoteConnection.getRemoteState();
 
-        if (updateMessage instanceof String && updateMessage.equals("reset")) {
-            this.remoteCar.reset();
-        }
-        else if (updateMessage instanceof String && updateMessage.equals("exit")) {
-            this.closeClient();
+        if (response instanceof String) {
+            switch ((String)response) {
+                case "reset":
+                    this.localCar.reset();
+                    break;
+                case "exit":
+                    this.closeClient();
+                    break;
+            }
         }
         else {
-            CarDTO retrievedState = (CarDTO)updateMessage;
-            this.remoteCar.setTrackPosition(retrievedState.position.x, retrievedState.position.y);
-            this.remoteCar.setSpeed(retrievedState.speed);
-            this.remoteCar.setImageOrientation(retrievedState.orientation);
+            CarDTO newState = (CarDTO)response;
+            this.remoteCar.setTrackPosition(newState.position.x, newState.position.y);
+            this.remoteCar.setSpeed(newState.speed);
+            this.remoteCar.setImageOrientation(newState.orientation);
         }
 
         String filename = this.remoteCar.getImageFilenameByIndex(this.remoteCar.getImageOrientation());

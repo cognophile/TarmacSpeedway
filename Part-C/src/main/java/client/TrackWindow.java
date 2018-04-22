@@ -8,7 +8,7 @@ public class TrackWindow
     private BaseWindow trackWindow;
     private TrackPanel track;
 
-    public TrackWindow(NetworkManager remoteConnection, Color selectedColour)
+    public TrackWindow(SocketCommunicationManager remoteConnection, Color selectedColour)
     {
         this.trackWindow = new BaseWindow("TarmacSpeedway: Track");
         this.track = new TrackPanel(remoteConnection, selectedColour);
