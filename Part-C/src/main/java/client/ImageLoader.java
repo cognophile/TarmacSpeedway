@@ -22,26 +22,21 @@ public abstract class ImageLoader
         File imageDirectory = null;
         Map<String, ImageIcon> carImageMap = new HashMap<>();
 
-        if (DeviceOS.isUnix() || DeviceOS.isMac())
-        {
+        if (DeviceOS.isUnix() || DeviceOS.isMac()) {
             imageDirectory = ImageLoader.createPathToImageDirectoryUnix(RESOURCE_IMAGES_RED_CAR_NIX);
         }
 
-        if (DeviceOS.isWindows())
-        {
+        if (DeviceOS.isWindows()) {
             imageDirectory = ImageLoader.createPathToImageDirectoryWindows(RESOURCE_IMAGES_RED_CAR_WIN);
         }
 
-        if (imageDirectory == null)
-        {
+        if (imageDirectory == null) {
             throw new UnsupportedOperationException("This operating system is not supported.");
         }
-        else
-        {
+        else {
             for (File file : imageDirectory.listFiles())
             {
-                if(file.getName().toLowerCase().endsWith(".png"))
-                {
+                if(file.getName().toLowerCase().endsWith(".png")) {
                     carImageMap.put(file.getName(), new ImageIcon(file.getPath()));
                 }
             }
@@ -60,26 +55,21 @@ public abstract class ImageLoader
         File imageDirectory = null;
         Map<String, ImageIcon> carImageMap = new HashMap<>();
 
-        if (DeviceOS.isUnix() || DeviceOS.isMac())
-        {
+        if (DeviceOS.isUnix() || DeviceOS.isMac()) {
             imageDirectory = ImageLoader.createPathToImageDirectoryUnix(RESOURCE_IMAGES_GREEN_CAR_NIX);
         }
 
-        if (DeviceOS.isWindows())
-        {
+        if (DeviceOS.isWindows()) {
             imageDirectory = ImageLoader.createPathToImageDirectoryWindows(RESOURCE_IMAGES_GREEN_CAR_WIN);
         }
 
-        if (imageDirectory == null)
-        {
+        if (imageDirectory == null) {
             throw new UnsupportedOperationException("This operating system is not supported.");
         }
-        else
-        {
+        else {
             for (File file : imageDirectory.listFiles())
             {
-                if(file.getName().toLowerCase().endsWith(".png"))
-                {
+                if(file.getName().toLowerCase().endsWith(".png")) {
                     carImageMap.put(file.getName(), new ImageIcon(file.getPath()));
                 }
             }

@@ -68,7 +68,7 @@ public class SplashWindow implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource().equals(selectRedCarBtn)) {
+        if (e.getSource().equals(this.selectRedCarBtn)) {
             this.selectedColour = Color.red;
             this.remoteConnection.setRemotePort(2302);
 
@@ -76,7 +76,7 @@ public class SplashWindow implements ActionListener
                     "Selection Made!", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        if (e.getSource().equals(selectGreenCarBtn)) {
+        if (e.getSource().equals(this.selectGreenCarBtn)) {
             this.selectedColour = Color.green;
             remoteConnection.setRemotePort(2303);
 

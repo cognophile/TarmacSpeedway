@@ -33,7 +33,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         if (selectedColour.equals(Color.red)) {
             this.localCar = new RedCar();
             this.remoteCar = new GreenCar();
-        } else {
+        }
+        else {
             this.localCar = new GreenCar();
             this.remoteCar = new RedCar();
         }
@@ -44,7 +45,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == this.timer) {
+        if (e.getSource() == this.timer) {
             repaint();
         }
     }
@@ -52,7 +53,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
-        switch(e.getKeyCode()) {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
                 this.localCar.increaseSpeed();
                 break;

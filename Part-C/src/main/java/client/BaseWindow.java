@@ -1,5 +1,7 @@
 package main.java.client;
 
+import main.java.utilities.Helper;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -48,7 +50,7 @@ public class BaseWindow extends JFrame
      */
     public void addComponents(Component component)
     {
-        if (component != null) {
+        if (Helper.isNotNull(component)) {
             this.components.add(component);
         }
     }
@@ -98,8 +100,7 @@ public class BaseWindow extends JFrame
 
     private void loadComponents()
     {
-        for (final Component obj : this.components)
-        {
+        for (final Component obj : this.components) {
             this.contentPane.add(obj);
         }
     }

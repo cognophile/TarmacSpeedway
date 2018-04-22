@@ -43,6 +43,10 @@ abstract public class Car
         return this.images.get(key);
     }
 
+    /**
+     * Reset this car to the start line
+     * @return void
+     */
     public final void reset()
     {
         this.speed = 0;
@@ -53,6 +57,7 @@ abstract public class Car
 
     /**
      * Increase the speed at which the cars moves
+     * @return void
      */
     public final void increaseSpeed()
     {
@@ -64,6 +69,7 @@ abstract public class Car
 
     /**
      * Decrease the speed at which the car moves
+     * @return void
      */
     public final void decreaseSpeed()
     {
@@ -80,6 +86,7 @@ abstract public class Car
 
     /**
      * Adjust this objects XY position relative to its speed, according to its trajectory.
+     * @return void
      */
     public final void move()
     {
@@ -106,6 +113,7 @@ abstract public class Car
 
     /**
      * Rotate the cars current image left and direction of travel accordingly
+     * @return void
      */
     public final void turnLeft()
     {
@@ -157,6 +165,7 @@ abstract public class Car
 
     /**
      * Rotate the cars current image right and direction of travel accordingly
+     * @return void
      */
     public final void turnRight()
     {
@@ -211,6 +220,10 @@ abstract public class Car
         }
     }
 
+    /**
+     * Determine whether this car has crashed into a safety barrier
+     * @return boolean
+     */
     public boolean isCrashed()
     {
         if (this.getTrackPosition().x <= TrackPanel.LEFT_BARRIER || this.getTrackPosition().x >= TrackPanel.RIGHT_BARRIER ||
@@ -222,6 +235,11 @@ abstract public class Car
         return false;
     }
 
+    /**
+     * Determine whether this car has collided with another
+     * @param Car otherCar
+     * @return boolean
+     */
     public boolean hasCollided(Car otherCar)
     {
         Rectangle firstCarRectangle = new Rectangle(
@@ -246,6 +264,7 @@ abstract public class Car
     /**
      * Set the direction of travel for this car object.
      * @param trajectory String The direction for the car image to move (up, down, left, right)
+     * @return void
      */
     public final void setTrajectory(String trajectory)
     {

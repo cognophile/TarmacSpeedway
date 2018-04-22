@@ -27,7 +27,8 @@ public abstract class NetworkConfigurationLoader
         StringBuilder contents = new StringBuilder();
 
         String line;
-        while ((line = fileReader.readLine()) != null) {
+        while ((line = fileReader.readLine()) != null)
+        {
             contents.append(line);
             contents.append("::");
         }

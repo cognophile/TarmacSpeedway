@@ -33,7 +33,6 @@ public class TurntablePanel extends JPanel implements ActionListener
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == this.timer) {
-
             if (this.imageIndex >= 16) {
                 this.imageIndex = 0;
             }

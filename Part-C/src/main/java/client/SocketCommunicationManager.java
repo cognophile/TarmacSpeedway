@@ -66,8 +66,7 @@ public class SocketCommunicationManager
      */
     public boolean send(Object request) throws RuntimeException
     {
-        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput))
-        {
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput)) {
             try {
                 this.objectOutput.writeObject(request);
                 this.objectOutput.flush();
@@ -90,14 +89,14 @@ public class SocketCommunicationManager
      */
     public boolean sendAndAwaitConfirmation(Object request, Object expectedResponse) throws RuntimeException
     {
-        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput))
-        {
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput)) {
             try {
                 this.objectOutput.writeObject(request);
                 this.objectOutput.flush();
 
                 Object response;
-                while ((response = this.objectInput.readObject()) != null) {
+                while ((response = this.objectInput.readObject()) != null)
+                {
                     if (response.equals(expectedResponse)) {
                        return true;
                     }
@@ -126,14 +125,14 @@ public class SocketCommunicationManager
      */
     public Object sendAndAwaitSerializedResponse(Object request) throws RuntimeException
     {
-        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput))
-        {
+        if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput)) {
             try {
                 this.objectOutput.writeObject(request);
                 this.objectOutput.flush();
 
                 Object response;
-                while ((response = this.objectInput.readObject()) != null) {
+                while ((response = this.objectInput.readObject()) != null)
+                {
                     return response;
                 }
             }
@@ -160,7 +159,6 @@ public class SocketCommunicationManager
         catch (IOException ex) {
             ErrorLogger.toConsole(ex);
         }
-
     }
 
     private boolean canLoadServerConfiguration()

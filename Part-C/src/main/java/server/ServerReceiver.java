@@ -63,7 +63,8 @@ public class ServerReceiver implements Runnable
     {
         try {
             Object received;
-            while ((received = this.senderObjectInput.readObject()) != null) {
+            while ((received = this.senderObjectInput.readObject()) != null)
+            {
                 if (received instanceof String) {
                     if (received.equals("ahoy")) {
                         this.respond("available");
