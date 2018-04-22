@@ -4,10 +4,7 @@ import main.java.utilities.CarDTO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 public class TrackPanel extends JPanel implements ActionListener, KeyListener
 {
@@ -18,10 +15,15 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private Car localCar;
     private Car remoteCar;
-    private NetworkManager remoteConnection;
+    private SocketCommunicationManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
-    public TrackPanel(NetworkManager remoteConnection, Color selectedColour)
+    /**
+     * Create a TrackPanel instance to render track and create Cars
+     * @param remoteConnection
+     * @param selectedColour
+     */
+    public TrackPanel(SocketCommunicationManager remoteConnection, Color selectedColour)
     {
         this.addKeyListener(this);
         this.setFocusable(true);
@@ -42,8 +44,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == this.timer)
-        {
+        if(e.getSource() == this.timer) {
             repaint();
         }
     }
@@ -51,16 +52,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_R)
-        {
-            this.localCar.reset();
-            this.remoteCar.reset();
-        }
-
-        switch(key)
-        {
+        switch(e.getKeyCode()) {
             case KeyEvent.VK_W:
                 this.localCar.increaseSpeed();
                 break;
@@ -73,6 +65,14 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
             case KeyEvent.VK_D:
                 this.localCar.turnRight();
                 break;
+            case KeyEvent.VK_R:
+                this.remoteConnection.send("reset");
+                this.localCar.reset();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                this.remoteConnection.send("exit");
+                this.remoteConnection.close();
+                this.closeClient();
         }
     }
 
@@ -132,14 +132,34 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private void drawRemoteCar(Graphics g)
     {
-        CarDTO remoteCarDTO = this.remoteConnection.getRemoteDTO();
-        this.remoteCar.setTrackPosition(remoteCarDTO.position.x, remoteCarDTO.position.y);
-        this.remoteCar.setSpeed(remoteCarDTO.speed);
-        this.remoteCar.setImageOrientation(remoteCarDTO.orientation);
+        Object response = this.remoteConnection.getRemoteState();
+
+        if (response instanceof String) {
+            switch ((String)response) {
+                case "reset":
+                    this.localCar.reset();
+                    break;
+                case "exit":
+                    this.closeClient();
+                    break;
+            }
+        }
+        else {
+            CarDTO newState = (CarDTO)response;
+            this.remoteCar.setTrackPosition(newState.position.x, newState.position.y);
+            this.remoteCar.setSpeed(newState.speed);
+            this.remoteCar.setImageOrientation(newState.orientation);
+        }
 
         String filename = this.remoteCar.getImageFilenameByIndex(this.remoteCar.getImageOrientation());
         ImageIcon remote = this.remoteCar.getImage(filename);
         remote.paintIcon(this, g, this.remoteCar.getTrackPosition().x, this.remoteCar.getTrackPosition().y);
+    }
+
+    private void closeClient()
+    {
+        JFrame client = (JFrame) SwingUtilities.windowForComponent(this);
+        client.dispatchEvent(new WindowEvent(client, WindowEvent.WINDOW_CLOSING));
     }
 
     @Override

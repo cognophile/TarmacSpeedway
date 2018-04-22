@@ -11,7 +11,6 @@ public class ServerReceiver implements Runnable
 {
     private int localPort;
     private int threadId;
-    private CarDTO remoteCarState = new CarDTO();
 
     private ServerSocket localServer;
     private Socket senderClientConnection;
@@ -77,17 +76,22 @@ public class ServerReceiver implements Runnable
                     }
 
                     if (received.equals("fetch")) {
-                        this.fetchStateTransformation();
-                        this.respond(this.remoteCarState);
+                        this.respond(this.fetchUpdateMessage());
+                        continue;
+                    }
+
+                    if (received.equals("reset")) {
+                        this.forwardUpdateMessage(received);
                         continue;
                     }
 
                     if (received.equals("exit")) {
+                        this.forwardUpdateMessage(received);
                         return;
                     }
                 }
                 else {
-                    this.forwardStateTransformation((CarDTO)received);
+                    this.forwardUpdateMessage(received);
                 }
             }
         }
@@ -110,14 +114,16 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private synchronized void fetchStateTransformation()
+    private synchronized Object fetchUpdateMessage()
     {
         if (!ThreadCommunicationQueue.isEitherQueueEmpty()) {
-            this.remoteCarState = ThreadCommunicationQueue.dequeue(this.threadId);
+            return ThreadCommunicationQueue.dequeue(this.threadId);
         }
+
+        return new CarDTO();
     }
 
-    private synchronized void forwardStateTransformation(CarDTO updatedState)
+    private synchronized void forwardUpdateMessage(Object updatedState)
     {
         ThreadCommunicationQueue.enqueue(this.threadId, updatedState);
     }
