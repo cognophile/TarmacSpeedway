@@ -141,6 +141,7 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
                     this.localCar.reset();
                     break;
                 case "exit":
+                    this.remoteConnection.close();
                     this.closeClient();
                     break;
             }
