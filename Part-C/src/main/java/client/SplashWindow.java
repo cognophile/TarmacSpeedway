@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 public class SplashWindow implements ActionListener
 {
     private BaseWindow splash;
-    private SocketCommunicationManager remoteConnection = new SocketCommunicationManager();
+    private NetworkManager remoteConnection = new NetworkManager();
     private JButton selectRedCarBtn = new JButton("Red Car");
     private JButton selectGreenCarBtn = new JButton("Green Car");
     private JButton startGameButton = new JButton("Race");

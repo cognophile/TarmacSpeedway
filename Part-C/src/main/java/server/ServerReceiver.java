@@ -13,10 +13,10 @@ public class ServerReceiver implements Runnable
     private int threadId;
 
     private ServerSocket localServer;
-    private Socket senderClientConnection;
+    private Socket clientConnection;
 
-    private ObjectInput senderObjectInput;
-    private ObjectOutput senderObjectOutput;
+    private ObjectInput clientObjectInput;
+    private ObjectOutput clientObjectOutput;
 
     public ServerReceiver(int threadId, int localPort)
     {
@@ -31,7 +31,7 @@ public class ServerReceiver implements Runnable
     public final void run()
     {
         this.createSocket();
-        this.establishConnections();
+        this.establishConnection();
         this.handleRequests();
         this.close();
     }
@@ -46,13 +46,13 @@ public class ServerReceiver implements Runnable
         }
     }
 
-    private void establishConnections()
+    private void establishConnection()
     {
         try {
-            this.senderClientConnection = this.localServer.accept();
+            this.clientConnection = this.localServer.accept();
 
-            this.senderObjectInput = new ObjectInputStream(this.senderClientConnection.getInputStream());
-            this.senderObjectOutput = new ObjectOutputStream(this.senderClientConnection.getOutputStream());
+            this.clientObjectInput = new ObjectInputStream(this.clientConnection.getInputStream());
+            this.clientObjectOutput = new ObjectOutputStream(this.clientConnection.getOutputStream());
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
@@ -63,7 +63,7 @@ public class ServerReceiver implements Runnable
     {
         try {
             Object received;
-            while ((received = this.senderObjectInput.readObject()) != null)
+            while ((received = this.clientObjectInput.readObject()) != null)
             {
                 if (received instanceof String) {
                     if (received.equals("ahoy")) {
@@ -107,8 +107,8 @@ public class ServerReceiver implements Runnable
     private void respond(Object T)
     {
         try {
-            this.senderObjectOutput.writeObject(T);
-            this.senderObjectOutput.flush();
+            this.clientObjectOutput.writeObject(T);
+            this.clientObjectOutput.flush();
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);
@@ -117,8 +117,8 @@ public class ServerReceiver implements Runnable
 
     private synchronized Object fetchUpdateMessage()
     {
-        if (!ThreadCommunicationQueue.isEitherQueueEmpty()) {
-            return ThreadCommunicationQueue.dequeue(this.threadId);
+        if (!ThreadCommunicationQueues.isEitherQueueEmpty()) {
+            return ThreadCommunicationQueues.dequeue(this.threadId);
         }
 
         return new CarDTO();
@@ -126,15 +126,15 @@ public class ServerReceiver implements Runnable
 
     private synchronized void forwardUpdateMessage(Object updatedState)
     {
-        ThreadCommunicationQueue.enqueue(this.threadId, updatedState);
+        ThreadCommunicationQueues.enqueue(this.threadId, updatedState);
     }
 
     private void close()
     {
         try {
-            this.senderObjectOutput.close();
-            this.senderObjectInput.close();
-            this.senderClientConnection.close();
+            this.clientObjectOutput.close();
+            this.clientObjectInput.close();
+            this.clientConnection.close();
         }
         catch (Exception ex) {
             ErrorLogger.toConsole(ex);

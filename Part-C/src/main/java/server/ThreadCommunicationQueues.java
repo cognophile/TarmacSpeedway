@@ -7,7 +7,7 @@ import java.util.AbstractQueue;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ThreadCommunicationQueue
+public abstract class ThreadCommunicationQueues
 {
     private static AbstractQueue<Object> redCarMessages = new ConcurrentLinkedQueue<>();
     private static AbstractQueue<Object> greenCarMessages = new ConcurrentLinkedQueue<>();

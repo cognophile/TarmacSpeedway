@@ -16,14 +16,14 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     private Car localCar;
     private Car remoteCar;
     private CarDTO localPreviousState = new CarDTO();
-    private SocketCommunicationManager remoteConnection;
+    private NetworkManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
     /**
      * Create a TrackPanel instance to render track and create Cars
      * @param remoteConnection
      */
-    public TrackPanel(SocketCommunicationManager remoteConnection, Car localCar, Car remoteCar)
+    public TrackPanel(NetworkManager remoteConnection, Car localCar, Car remoteCar)
     {
         this.addKeyListener(this);
         this.setFocusable(true);

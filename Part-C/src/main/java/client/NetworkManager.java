@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
-public class SocketCommunicationManager
+public class NetworkManager
 {
     private Socket socket;
     private int remotePort = 0;
@@ -55,7 +55,7 @@ public class SocketCommunicationManager
      */
     public Object getRemoteState()
     {
-        return this.sendAndAwaitSerializedResponse("fetch");
+        return this.sendAndAwaitSerialized("fetch");
     }
 
     /**
@@ -123,7 +123,7 @@ public class SocketCommunicationManager
      * @return Object
      * @throws RuntimeException If the server is unavailable
      */
-    public Object sendAndAwaitSerializedResponse(Object request) throws RuntimeException
+    public Object sendAndAwaitSerialized(Object request) throws RuntimeException
     {
         if (Helper.isNotNull(this.socket) && Helper.isNotNull(this.objectOutput) && Helper.isNotNull(this.objectInput)) {
             try {
