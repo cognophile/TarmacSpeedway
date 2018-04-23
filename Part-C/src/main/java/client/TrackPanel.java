@@ -15,29 +15,22 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
 
     private Car localCar;
     private Car remoteCar;
+    private CarDTO localPreviousState = new CarDTO();
     private SocketCommunicationManager remoteConnection;
     private Timer timer = new Timer(175, this);
 
     /**
      * Create a TrackPanel instance to render track and create Cars
      * @param remoteConnection
-     * @param selectedColour
      */
-    public TrackPanel(SocketCommunicationManager remoteConnection, Color selectedColour)
+    public TrackPanel(SocketCommunicationManager remoteConnection, Car localCar, Car remoteCar)
     {
         this.addKeyListener(this);
         this.setFocusable(true);
 
+        this.localCar = localCar;
+        this.remoteCar = remoteCar;
         this.remoteConnection = remoteConnection;
-
-        if (selectedColour.equals(Color.red)) {
-            this.localCar = new RedCar();
-            this.remoteCar = new GreenCar();
-        }
-        else {
-            this.localCar = new GreenCar();
-            this.remoteCar = new RedCar();
-        }
 
         this.timer.start();
     }
@@ -111,7 +104,8 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         this.drawRemoteCar(g);
     }
 
-    private void drawLocalCar(Graphics g) {
+    private void drawLocalCar(Graphics g)
+    {
         String filename = this.localCar.getImageFilenameByIndex(this.localCar.getImageOrientation());
         ImageIcon controlled = this.localCar.getImage(filename);
         controlled.paintIcon(this, g, this.localCar.getTrackPosition().x, this.localCar.getTrackPosition().y);
@@ -127,7 +121,12 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
         localCarDTO.position = this.localCar.getTrackPosition();
         localCarDTO.trajectory = this.localCar.getTrajectory();
         localCarDTO.orientation = this.localCar.getImageOrientation();
-        this.remoteConnection.send(localCarDTO);
+
+        if (this.isChanged(localCarDTO)) {
+            this.remoteConnection.send(localCarDTO);
+        }
+
+        this.localPreviousState = localCarDTO;
     }
 
 
@@ -162,6 +161,18 @@ public class TrackPanel extends JPanel implements ActionListener, KeyListener
     {
         JFrame client = (JFrame) SwingUtilities.windowForComponent(this);
         client.dispatchEvent(new WindowEvent(client, WindowEvent.WINDOW_CLOSING));
+    }
+
+    private boolean isChanged(CarDTO currentState)
+    {
+        if (currentState.speed == this.localPreviousState.speed &&
+                currentState.trajectory.equals(this.localPreviousState.trajectory) &&
+                currentState.orientation == this.localPreviousState.orientation &&
+                currentState.position.equals(this.localPreviousState.position)) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

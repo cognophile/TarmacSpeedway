@@ -1,6 +1,10 @@
 package main.java.server;
 
+import main.java.client.Car;
+import main.java.utilities.CarDTO;
+
 import java.util.AbstractQueue;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ThreadCommunicationQueue
@@ -31,10 +35,18 @@ public class ThreadCommunicationQueue
     public synchronized static Object dequeue(int threadNumber)
     {
         if (threadNumber == 1) {
-            return greenCarMessages.poll();
+            if (greenCarMessages.size() > 1) {
+                return greenCarMessages.poll();
+            }
+
+            return greenCarMessages.peek();
         }
         else {
-            return redCarMessages.poll();
+            if (redCarMessages.size() > 1) {
+                return redCarMessages.poll();
+            }
+
+            return redCarMessages.peek();
         }
     }
 

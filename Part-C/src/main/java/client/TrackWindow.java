@@ -11,7 +11,13 @@ public class TrackWindow
     public TrackWindow(SocketCommunicationManager remoteConnection, Color selectedColour)
     {
         this.trackWindow = new BaseWindow("TarmacSpeedway: Track");
-        this.track = new TrackPanel(remoteConnection, selectedColour);
+
+        if (selectedColour.equals(Color.red)) {
+            this.track = new TrackPanel(remoteConnection, new RedCar(), new GreenCar());
+        }
+        else {
+            this.track = new TrackPanel(remoteConnection, new GreenCar(), new RedCar());
+        }
     }
 
     /**
