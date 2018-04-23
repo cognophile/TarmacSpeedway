@@ -245,13 +245,13 @@ abstract public class Car
         Rectangle firstCarRectangle = new Rectangle(
                 this.getTrackPosition().x,
                 this.getTrackPosition().y,
-                50, 30
+                45, 25
         );
 
         Rectangle secondCarRectangle  = new Rectangle(
                 otherCar.getTrackPosition().x,
                 otherCar.getTrackPosition().y,
-                50, 30
+                45, 25
         );
 
         if (firstCarRectangle.intersects(secondCarRectangle) || secondCarRectangle.intersects(firstCarRectangle)) {
