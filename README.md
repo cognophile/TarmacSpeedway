@@ -42,6 +42,8 @@ _'Sources'_ tab on the right.
 - Open 2 instances of the client on the same machine. 
     - Compile all classes under the `client` package, then run `ApplicationLauncher.java` through another fresh terminal window. You may need to navigate to `../TarmacSpeedway/Part-C/out/production/Part-C` and run `java main.java.client.ApplicationLauncher`. Alternatively, build and run via an IDE by creating a build configuration and pointing it at said class.
 
+- Edit the `remote` key within `Part-C/main/resources/remoteConfiguration.txt` to specify either the address of your local-network server (e.g. `192.168.1.1`) or specify it as `localhost`, for both clients. Save and exit the file.
+
 - Each client must select a Car colour. 
 
 - Click to start the race.
